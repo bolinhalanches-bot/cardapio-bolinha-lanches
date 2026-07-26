@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio - Bolinha Lanches</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-header {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+        padding: 50px 20px;
+        text-align: center;
+        border-bottom: 3px solid #ff9800;
+    }
+
+    .hero-header h1 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 42px;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .hero-header h1 span.emoji {
+        font-size: 1.2em;
+    }
+
+    .hero-header p {
+        color: #ffb74d;
+        margin: 15px 0 0 0;
+        font-size: 18px;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .status-loja {
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        white-space: normal;
+    }
+
+    .aberto {
+        background-color: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+        border: 1px solid #4CAF50;
+    }
+
+    .fechado {
+        background-color: rgba(231, 76, 60, 0.2);
+        color: #e74c3c;
+        border: 1px solid #e74c3c;
+    }
+
+    .aviso-tempo {
+        text-align: center;
+        padding: 10px;
+        background-color: rgba(255, 152, 0, 0.1);
+        color: #ffb74d;
+        border: 1px dashed #ff9800;
+        border-radius: 5px;
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 620px;
+        margin: 20px auto;
+        background: #1e1e1e;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    .section-hamburgueres,
+    .section-pizzas,
+    .section-bebidas,
+    .section-acrescimos {
+        background-size: cover;
+        background-position: center;
+        padding: 18px;
+        border-radius: 8px;
+        margin-top: 30px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 152, 0, 0.15);
+    }
+
+    .section-hamburgueres {
+        background-image: linear-gradient(rgba(18,18,18,0.75), rgba(18,18,18,0.75)), url('WhatsApp Image 2026-07-25 at 02.05.28 (3).jpeg');
+    }
+
+    .section-pizzas {
+        background-image: linear-gradient(rgba(18,18,18,0.75), rgba(18,18,18,0.75)), url('WhatsApp Image 2026-07-25 at 02.05.28 (1).jpeg');
+    }
+
+    .section-bebidas {
+        background-image: linear-gradient(rgba(18,18,18,0.8), rgba(18,18,18,0.8)), url('https://images.unsplash.com/photo-1543253687-c931c8e01820?auto=format&fit=crop&w=800&q=80');
+    }
+
+    .section-acrescimos {
+        background-image: linear-gradient(rgba(18,18,18,0.8), rgba(18,18,18,0.8)), url('https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?auto=format&fit=crop&w=800&q=80');
+    }
+
+    h2 {
+        color: #ff9800;
+        border-bottom: 1px solid #333;
+        padding-bottom: 6px;
+        margin-top: 0;
+    }
+
+    .category-nav {
+        position: sticky;
+        top: 0;
+        background-color: #121212;
+        padding: 15px 10px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        z-index: 100;
+        border-bottom: 1px solid #333;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        white-space: nowrap;
+    }
+
+    .category-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-nav a {
+        text-decoration: none;
+    }
+
+    .category-nav button {
+        background: #333;
+        color: #fff;
+        border: 1px solid #555;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .category-nav button:hover {
+        background: #ff9800;
+        color: #121212;
+        border-color: #ff9800;
+    }
+
+    .category-nav button.active {
+        background: #ff9800;
+        color: #121212;
+        border-color: #ff9800;
+    }
+
+    .categoria-oculta {
+        display: none !important;
+    }
+
+    .item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 15px 0;
+        background: rgba(0, 0, 0, 0.14);
+        border-radius: 8px;
+        margin-bottom: 14px;
+    }
+
+    .item:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+
+    .item h3 {
+        color: #ff9800;
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .item p {
+        font-size: 13px;
+        color: #dddddd;
+        margin: 0 0 15px 0;
+        line-height: 1.5;
+    }
+
+    .sizes {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .btn-size,
+    .btn-add,
+    .btn-remover,
+    .btn-cancel,
+    .btn-confirm,
+    .btn-finalizar {
+        transition: 0.2s ease;
+    }
+
+    .btn-size {
+        background: transparent;
+        color: #ffffff;
+        border: 1px solid #555;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .btn-size:hover {
+        background: #333;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+
+    .btn-add {
+        background: transparent;
+        color: #ffffff;
+        border: 1px solid #ff9800;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-add:hover {
+        background: #ff9800;
+        color: #121212;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.8);
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+        padding: 20px;
+    }
+
+    .modal-content {
+        background: #1e1e1e;
+        padding: 20px;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 420px;
+        border: 1px solid #333;
+    }
+
+    .modal-content h3 {
+        color: #ff9800;
+        margin-top: 0;
+        font-size: 18px;
+    }
+
+    .modal-content input,
+    .modal-content select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0 15px 0;
+        border: 1px solid #555;
+        border-radius: 4px;
+        background: #2c2c2c;
+        color: white;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-cancel {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-confirm {
+        background: #ff9800;
+        color: #121212;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #4CAF50;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 15px;
+        position: fixed;
+        z-index: 300;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    #toast.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @keyframes fadein {
+        from { bottom: 0; opacity: 0; }
+        to { bottom: 30px; opacity: 1; }
+    }
+
+    @keyframes fadeout {
+        from { bottom: 30px; opacity: 1; }
+        to { bottom: 0; opacity: 0; }
+    }
+
+    .cart {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 2px dashed #ff9800;
+    }
+
+    .cart-item {
+        margin-bottom: 12px;
+        font-size: 15px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .cart-item-info {
+        flex-grow: 1;
+    }
+
+    .cart-obs {
+        font-size: 13px;
+        color: #ffb74d;
+        font-style: italic;
+        display: block;
+        margin-top: 4px;
+    }
+
+    .btn-remover {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .btn-remover:hover {
+        background: #c0392b;
+    }
+
+    .total {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 15px;
+        color: #ff9800;
+    }
+
+    .cart-summary {
+        font-size: 15px;
+        color: #ccc;
+        margin-top: 8px;
+    }
+
+    .cart-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+
+    .cart-controls span {
+        min-width: 30px;
+        text-align: center;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    #btn-limpar {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    #btn-limpar:hover {
+        background: #777;
+    }
+
+    .opcoes-pedido {
+        margin-top: 20px;
+        background: #252525;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #444;
+    }
+
+    .opcoes-pedido label {
+        display: block;
+        margin-top: 12px;
+        color: #aaa;
+        font-size: 14px;
+    }
+
+    .opcoes-pedido select,
+    .opcoes-pedido input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 4px;
+        border: 1px solid #555;
+        background: #1e1e1e;
+        color: white;
+        font-size: 15px;
+    }
+
+    .btn-finalizar {
+        background: #ff9800;
+        color: #121212;
+        width: 100%;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-finalizar:hover {
+        background: #e68a00;
+    }
+
+    .btn-finalizar:disabled {
+        background: #555;
+        color: #888;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 10px;
+            padding: 16px;
+        }
+
+        .sizes {
+            flex-direction: column;
+        }
+
+        .btn-size,
+        .btn-add {
+            width: 100%;
+        }
+
+        .modal-content {
+            max-width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="category-nav">
+    <button type="button" onclick="filtrarCategoria('todos')">📋 Todos</button>
+    <button type="button" onclick="filtrarCategoria('hamburgueres')">🍔 Hambúrgueres</button>
+    <button type="button" onclick="filtrarCategoria('acrescimos')">🥓 Acréscimos</button>
+    <button type="button" onclick="filtrarCategoria('pizzas')">🍕 Pizzas</button>
+    <button type="button" onclick="filtrarCategoria('bebidas')">🥤 Bebidas</button>
+    <a href="#carrinho-sec"><button type="button">🛒 Carrinho</button></a>
+</div>
+
+<div class="hero-header">
+    <h1><span class="emoji">🍔</span> Bolinha Lanches <span class="emoji">🍕</span></h1>
+    <p>O lanche do tamanho da sua fome</p>
+</div>
+
+<div class="container">
+    <div id="status-loja" class="status-loja" aria-live="polite">Verificando horário...</div>
+
+    <div class="aviso-tempo">
+        ⏳ <strong>Atenção:</strong> O tempo estimado de preparo e entrega será informado pelo atendente ao receber seu pedido.
+    </div>
+
+    <section class="section-hamburgueres" id="hamburgueres-sec" data-category="hamburgueres">
+        <h2>Hambúrgueres</h2>
+        <div class="item">
+            <h3>Hambúrguer</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate</p>
+            <button type="button" class="btn-add" onclick="abrirModal('Hambúrguer', '', 18.00, 'lanche')">R$ 18,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Burguer</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Burguer', '', 23.00, 'lanche')">R$ 23,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Calabresa</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Calabresa</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Calabresa', '', 23.00, 'lanche')">R$ 23,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Egg Burguer</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Ovo</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Egg Burguer', '', 28.00, 'lanche')">R$ 28,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Bacon</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Bacon', '', 28.00, 'lanche')">R$ 28,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Egg Bacon</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Ovo, Bacon</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Egg Bacon', '', 30.00, 'lanche')">R$ 30,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Egg Calabresa</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Ovo, Calabresa</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Egg Calabresa', '', 30.00, 'lanche')">R$ 30,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Tudo</h3>
+            <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon, Ovo, Frango, Catupiry, Cheddar</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Tudo', '', 35.00, 'lanche')">R$ 35,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Tudão</h3>
+            <p>Pão de Hambúrguer, 2 Bifes, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon, Ovo, Frango, Catupiry, Cheddar</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Tudão', '', 38.00, 'lanche')">R$ 38,00 - Adicionar</button>
+        </div>
+        <div class="item">
+            <h3>X-Bolinha</h3>
+            <p>Pão de Hambúrguer, 2 Bifes, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon, Ovo, Frango, Catupiry, Cheddar, Calabresa</p>
+            <button type="button" class="btn-add" onclick="abrirModal('X-Bolinha', '', 40.00, 'lanche')">R$ 40,00 - Adicionar</button>
+        </div>
+    </section>
+
+    <section class="section-acrescimos" id="acrescimos-sec" data-category="acrescimos">
+        <h2>Acréscimos (Porções Extras)</h2>
+        <p style="font-size: 13px; color: #ccc;">Adicione ingredientes extras ao seu pedido</p>
+        <div class="sizes">
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Bife', '', 4.00, 'acrescimo')">+ Bife: R$ 4,00</button>
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Cheddar', '', 3.00, 'acrescimo')">+ Cheddar: R$ 3,00</button>
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Catupiry', '', 3.00, 'acrescimo')">+ Catupiry: R$ 3,00</button>
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Frango', '', 4.00, 'acrescimo')">+ Frango: R$ 4,00</button>
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Ovo', '', 2.00, 'acrescimo')">+ Ovo: R$ 2,00</button>
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Bacon', '', 4.00, 'acrescimo')">+ Bacon: R$ 4,00</button>
+            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Calabresa', '', 3.50, 'acrescimo')">+ Calabresa: R$ 3,50</button>
+        </div>
+    </section>
+
+    <section class="section-pizzas" id="pizzas-sec" data-category="pizzas">
+        <h2>Pizzas</h2>
+        <div class="item">
+            <h3>Moda da Casa</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Cebola, Azeitona, Calabresa, Palmito, Tomate, Ovo, Milho, Frango, Bacon, Orégano, Pimentão</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'P', 52.00, 'pizza')">P: R$ 52,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'M', 67.00, 'pizza')">M: R$ 67,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'G', 82.00, 'pizza')">G: R$ 82,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'GG', 94.00, 'pizza')">GG: R$ 94,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Palmito</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Tomate, Palmito, Orégano</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'P', 48.00, 'pizza')">P: R$ 48,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'M', 64.00, 'pizza')">M: R$ 64,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'G', 79.00, 'pizza')">G: R$ 79,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'GG', 90.00, 'pizza')">GG: R$ 90,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Portuguesa</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Cebola, Azeitona, Calabresa, Tomate, Ovo, Orégano, Pimentão</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Calabresa</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Calabresa, Cebola, Orégano</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Bacon</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Milho, Bacon, Orégano</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Frango com Catupiry</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Milho, Frango, Catupiry, Orégano</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Carne Desfiada com Catupiry</h3>
+            <p>Molho de Tomate, Muçarela, Carne Desfiada, Catupiry, Orégano</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'P', 52.00, 'pizza')">P: R$ 52,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'M', 67.00, 'pizza')">M: R$ 67,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'G', 82.00, 'pizza')">G: R$ 82,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'GG', 94.00, 'pizza')">GG: R$ 94,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Napolitana</h3>
+            <p>Molho de Tomate, Muçarela, Presunto, Tomate, Orégano</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'P', 45.00, 'pizza')">P: R$ 45,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'M', 62.00, 'pizza')">M: R$ 62,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'G', 75.00, 'pizza')">G: R$ 75,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'GG', 86.00, 'pizza')">GG: R$ 86,00</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-bebidas" id="bebidas-sec" data-category="bebidas">
+        <h2>Bebidas</h2>
+        <div class="item">
+            <h3>🥤 Refrigerantes 2L</h3>
+            <p>Opções Tradicionais</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola 2L', '', 14.00, 'bebida')">Coca-Cola: R$ 14,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pepsi 2L', '', 12.00, 'bebida')">Pepsi: R$ 12,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Guaraná 2L', '', 12.00, 'bebida')">Guaraná: R$ 12,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Sukita 2L', '', 10.00, 'bebida')">Sukita: R$ 10,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>🥤 Refrigerantes 1L</h3>
+            <p>Tamanho Médio</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola 1L', '', 9.00, 'bebida')">Coca-Cola: R$ 9,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pepsi 1L', '', 8.00, 'bebida')">Pepsi: R$ 8,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Guaraná 1L', '', 8.00, 'bebida')">Guaraná: R$ 8,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>🥫 Refrigerantes Lata (350ml)</h3>
+            <p>Tamanho Individual</p>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola Lata', '', 6.00, 'bebida')">Coca-Cola: R$ 6,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Guaraná Lata', '', 5.50, 'bebida')">Guaraná: R$ 5,50</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Sukita Lata', '', 5.00, 'bebida')">Sukita: R$ 5,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>🥫 Refrigerantes Mini</h3>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Mini Coca-Cola', '', 4.00, 'bebida')">Mini Coca: R$ 4,00</button>
+            </div>
+        </div>
+        <div class="item">
+            <h3>🥤🥫 Linha Zero Açúcar</h3>
+            <div class="sizes">
+                <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola Zero 2L', '', 14.00, 'bebida')">Coca Zero 2L: R$ 14,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Guaraná Zero 2L', '', 12.00, 'bebida')">Guaraná Zero 2L: R$ 12,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola Zero Lata', '', 6.00, 'bebida')">Coca Zero Lata: R$ 6,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Guaraná Zero Lata', '', 5.50, 'bebida')">Guaraná Zero Lata: R$ 5,50</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="cart" id="carrinho-sec">
+        <h2>🛒 Seu Pedido</h2>
+        <div id="itens-carrinho" style="color: #ccc;">Nenhum item adicionado ainda.</div>
+        <div class="cart-summary" id="cart-summary">Quantidade de itens: 0</div>
+        <div class="total" id="total-carrinho">Total: R$ 0,00</div>
+        <button type="button" id="btn-limpar" class="btn-remover" onclick="limparCarrinho()">Limpar Carrinho</button>
+
+        <div class="opcoes-pedido">
+            <label for="tipo-pedido"><strong>Como deseja receber?</strong></label>
+            <select id="tipo-pedido">
+                <option value="Receber em Casa (Entrega)">🛵 Receber em Casa (Entrega)</option>
+                <option value="Buscar na Loja (Retirada)">🥡 Buscar na Loja (Retirada)</option>
+            </select>
+
+            <label><strong>Seu Nome Completo:</strong></label>
+            <input type="text" id="cliente-nome" placeholder="Ex: João da Silva">
+
+            <label><strong>Endereço (Rua e Número):</strong></label>
+            <input type="text" id="cliente-endereco" placeholder="Ex: Rua das Flores, 123">
+
+            <label><strong>Bairro:</strong></label>
+            <input type="text" id="cliente-bairro" placeholder="Ex: Centro">
+
+            <label for="forma-pagamento"><strong>Forma de Pagamento:</strong></label>
+            <select id="forma-pagamento" onchange="verificarPagamento()">
+                <option value="Pix">PIX</option>
+                <option value="Dinheiro">Dinheiro</option>
+            </select>
+
+            <div id="bloco-troco" style="display: none;">
+                <label><strong>Troco para quanto? (Deixe em branco se não precisar):</strong></label>
+                <input type="text" id="cliente-troco" placeholder="Ex: 50,00" inputmode="decimal">
+            </div>
+        </div>
+
+        <button type="button" id="btn-finalizar" class="btn-finalizar" onclick="finalizarPedido()">Finalizar Pedido via WhatsApp</button>
+    </section>
+</div>
+
+<div class="modal" id="modal-obs" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+        <h3 id="modal-title">Adicionar Observação</h3>
+
+        <div id="bloco-borda" style="display: none;">
+            <label style="color: #ffb74d; font-size: 14px;"><strong>Deseja Borda Recheada?</strong></label>
+            <select id="select-borda">
+                <option value="0">Massa Tradicional (Sem Borda Recheada)</option>
+                <option value="5.00">Borda de Cheddar (+ R$ 5,00)</option>
+                <option value="5.00">Borda de Catupiry (+ R$ 5,00)</option>
+            </select>
+        </div>
+
+        <p style="font-size: 13px; color: #ccc;">Ex: Tirar a cebola, ponto da carne, gelo no refri, etc.</p>
+        <input type="text" id="input-obs" placeholder="Digite sua observação aqui...">
+
+        <div class="modal-buttons">
+            <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+            <button type="button" class="btn-confirm" onclick="adicionarAoCarrinho()">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast">Item adicionado com sucesso! ✅</div>
+
+<script>
+    const STORAGE_KEY = 'bolinhaCarrinho';
+    let carrinho = [];
+    let total = 0;
+    let itemAtual = null;
+
+    function carregarCarrinho() {
+        const dados = localStorage.getItem(STORAGE_KEY);
+        if (!dados) return;
+
+        try {
+            const salvo = JSON.parse(dados);
+            if (Array.isArray(salvo.carrinho)) {
+                carrinho = salvo.carrinho.map(item => ({
+                    nome: item.nome,
+                    preco: item.preco,
+                    obs: item.obs,
+                    quantidade: item.quantidade || 1
+                }));
+                total = calcularTotal();
+            }
+        } catch (erro) {
+            console.warn('Falha ao carregar carrinho:', erro);
+        }
+    }
+
+    function salvarCarrinho() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ carrinho, total }));
+    }
+
+    function calcularTotal() {
+        return carrinho.reduce((acum, item) => acum + item.preco * item.quantidade, 0);
+    }
+
+    function calcularQuantidadeItens() {
+        return carrinho.reduce((acum, item) => acum + item.quantidade, 0);
+    }
+
+    function checarHorarioFuncionamento() {
+        const agora = new Date();
+        const diaSemana = agora.getDay();
+        const hora = agora.getHours();
+        const minutos = agora.getMinutes();
+        const horaDecimal = hora + minutos / 60;
+
+        const statusDiv = document.getElementById('status-loja');
+        const btnFinalizar = document.getElementById('btn-finalizar');
+
+        const diaUtil = diaSemana !== 2;
+        const horarioUtil = horaDecimal >= 18.0 && horaDecimal <= 22.5;
+
+        if (diaUtil && horarioUtil) {
+            statusDiv.className = 'status-loja aberto';
+            statusDiv.innerHTML = '🟢 Loja Aberta! Faça seu pedido.';
+            btnFinalizar.disabled = false;
+            btnFinalizar.innerText = 'Finalizar Pedido via WhatsApp';
+        } else {
+            statusDiv.className = 'status-loja fechado';
+            statusDiv.innerHTML = '🔴 Estamos Fechados no Momento.<br><small>Funcionamento: Quarta a Segunda, das 18:00 às 22:30</small>';
+            btnFinalizar.disabled = true;
+            btnFinalizar.innerText = 'Loja Fechada no Momento';
+        }
+    }
+
+    function abrirModal(nome, tamanho, preco, tipo) {
+        const nomeCompleto = tamanho ? `${nome} (Tam: ${tamanho})` : nome;
+        itemAtual = { nome: nomeCompleto, preco, tipo };
+
+        const modal = document.getElementById('modal-obs');
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        const inputObs = document.getElementById('input-obs');
+        inputObs.value = '';
+        inputObs.focus();
+
+        document.getElementById('modal-title').innerText = `Adicionando: ${nomeCompleto}`;
+
+        const blocoBorda = document.getElementById('bloco-borda');
+        const selectBorda = document.getElementById('select-borda');
+
+        if (tipo === 'pizza') {
+            blocoBorda.style.display = 'block';
+            selectBorda.value = '0';
+        } else {
+            blocoBorda.style.display = 'none';
+        }
+    }
+
+    function fecharModal() {
+        const modal = document.getElementById('modal-obs');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        itemAtual = null;
+    }
+
+    function mostrarToast() {
+        const toast = document.getElementById('toast');
+        toast.className = 'show';
+        setTimeout(() => toast.className = toast.className.replace('show', ''), 3000);
+    }
+
+    function adicionarAoCarrinho() {
+        if (!itemAtual) {
+            fecharModal();
+            return;
+        }
+
+        const obs = document.getElementById('input-obs').value.trim();
+        let precoFinal = itemAtual.preco;
+        let nomeFinal = itemAtual.nome;
+
+        if (itemAtual.tipo === 'pizza') {
+            const selectBorda = document.getElementById('select-borda');
+            const valorBorda = parseFloat(selectBorda.value);
+            const nomeBorda = selectBorda.options[selectBorda.selectedIndex].text;
+
+            if (valorBorda > 0) {
+                precoFinal += valorBorda;
+                const textoBorda = nomeBorda.split(' (+')[0];
+                nomeFinal += ` [Com ${textoBorda}]`;
+            }
+        }
+
+        const itemExistente = carrinho.find(item => item.nome === nomeFinal && item.obs === obs && item.preco === precoFinal);
+        if (itemExistente) {
+            itemExistente.quantidade += 1;
+        } else {
+            carrinho.push({ nome: nomeFinal, preco: precoFinal, obs, quantidade: 1 });
+        }
+
+        total = calcularTotal();
+        salvarCarrinho();
+        fecharModal();
+        atualizarCarrinho();
+        mostrarToast();
+    }
+
+    function alterarQuantidade(index, delta) {
+        const item = carrinho[index];
+        if (!item) return;
+        item.quantidade += delta;
+        if (item.quantidade < 1) {
+            carrinho.splice(index, 1);
+        }
+        total = calcularTotal();
+        salvarCarrinho();
+        atualizarCarrinho();
+    }
+
+    function removerItem(index) {
+        if (!carrinho[index]) return;
+        carrinho.splice(index, 1);
+        total = calcularTotal();
+        salvarCarrinho();
+        atualizarCarrinho();
+    }
+
+    function limparCarrinho() {
+        if (!carrinho.length) return;
+        if (!confirm('Deseja realmente limpar o carrinho?')) return;
+        carrinho = [];
+        total = 0;
+        salvarCarrinho();
+        atualizarCarrinho();
+    }
+
+    function verificarPagamento() {
+        const pagamento = document.getElementById('forma-pagamento').value;
+        const blocoTroco = document.getElementById('bloco-troco');
+        const trocoInput = document.getElementById('cliente-troco');
+
+        if (pagamento === 'Dinheiro') {
+            blocoTroco.style.display = 'block';
+        } else {
+            blocoTroco.style.display = 'none';
+            trocoInput.value = '';
+            trocoInput.setCustomValidity('');
+        }
+    }
+
+    function validarTroco() {
+        const pagamento = document.getElementById('forma-pagamento').value;
+        const trocoInput = document.getElementById('cliente-troco');
+        const troco = trocoInput.value.trim();
+
+        if (pagamento === 'Dinheiro' && troco) {
+            const valor = parseFloat(troco.replace(',', '.'));
+            if (Number.isNaN(valor) || valor <= 0) {
+                trocoInput.setCustomValidity('Informe um valor de troco válido.');
+                trocoInput.reportValidity();
+                return false;
+            }
+        }
+
+        trocoInput.setCustomValidity('');
+        return true;
+    }
+
+    function filtrarCategoria(categoria) {
+        const secoes = document.querySelectorAll('section[data-category]');
+        secoes.forEach(secao => {
+            if (categoria === 'todos' || secao.dataset.category === categoria) {
+                secao.classList.remove('categoria-oculta');
+            } else {
+                secao.classList.add('categoria-oculta');
+            }
+        });
+
+        marcarCategoriaAtiva(categoria);
+        if (categoria !== 'todos') {
+            const alvo = document.getElementById(`${categoria}-sec`);
+            if (alvo) {
+                alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    }
+
+    function marcarCategoriaAtiva(categoria) {
+        const botoes = document.querySelectorAll('.category-nav button');
+        botoes.forEach(botao => {
+            botao.classList.toggle('active', botao.getAttribute('onclick')?.includes(`filtrarCategoria('${categoria}')`));
+        });
+    }
+
+    function atualizarCarrinho() {
+        const divItens = document.getElementById('itens-carrinho');
+        const divTotal = document.getElementById('total-carrinho');
+        const divResumo = document.getElementById('cart-summary');
+        const btnLimpar = document.getElementById('btn-limpar');
+
+        if (carrinho.length === 0) {
+            divItens.innerHTML = 'Nenhum item adicionado ainda.';
+            divResumo.innerText = 'Quantidade de itens: 0';
+            divTotal.innerText = 'Total: R$ 0,00';
+            btnLimpar.disabled = true;
+            return;
+        }
+
+        divItens.innerHTML = '';
+        carrinho.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+
+            let conteudoItem = `<div class="cart-item-info">
+                <b>${item.nome}</b><br>
+                R$ ${item.preco.toFixed(2).replace('.', ',')} cada<br>
+                <small>Subtotal: R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</small>`;
+
+            if (item.obs) {
+                conteudoItem += `<span class="cart-obs">Obs: ${item.obs}</span>`;
+            }
+
+            conteudoItem += `<div class="cart-controls">
+                <button type="button" class="btn-size" onclick="alterarQuantidade(${index}, -1)">-</button>
+                <span>${item.quantidade}</span>
+                <button type="button" class="btn-size" onclick="alterarQuantidade(${index}, 1)">+</button>
+            </div>`;
+            conteudoItem += '</div>';
+
+            const botaoRemover = `<button type="button" class="btn-remover" onclick="removerItem(${index})">🗑️ Remover</button>`;
+            div.innerHTML = conteudoItem + botaoRemover;
+            divItens.appendChild(div);
+        });
+
+        divResumo.innerText = `Quantidade de itens: ${calcularQuantidadeItens()}`;
+        divTotal.innerText = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+        btnLimpar.disabled = false;
+    }
+
+    function finalizarPedido() {
+        if (carrinho.length === 0) {
+            alert('Seu carrinho está vazio! Adicione itens antes de finalizar.');
+            return;
+        }
+
+        if (!validarTroco()) {
+            return;
+        }
+
+        const nome = document.getElementById('cliente-nome').value.trim();
+        const endereco = document.getElementById('cliente-endereco').value.trim();
+        const bairro = document.getElementById('cliente-bairro').value.trim();
+
+        if (!nome || !endereco || !bairro) {
+            alert('Por favor, preencha seu Nome, Endereço e Bairro antes de finalizar o pedido!');
+            document.getElementById('carrinho-sec').scrollIntoView();
+            return;
+        }
+
+        const numeroWhatsApp = '5533991132395';
+        const tipoPedido = document.getElementById('tipo-pedido').value;
+        const formaPagamento = document.getElementById('forma-pagamento').value;
+        const troco = document.getElementById('cliente-troco').value.trim();
+
+        let mensagem = 'Olá! Gostaria de fazer um pedido no *Bolinha Lanches*:%0A%0A';
+
+        carrinho.forEach(item => {
+            mensagem += `✅ *${item.nome}* - R$ ${item.preco.toFixed(2).replace('.', ',')} x${item.quantidade} = R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}%0A`;
+            if (item.obs) {
+                mensagem += `   _Obs: ${item.obs}_%0A`;
+            }
+        });
+
+        mensagem += `%0A💰 *Total dos Itens:* R$ ${total.toFixed(2).replace('.', ',')}%0A`;
+        mensagem += `📦 *Tipo:* ${tipoPedido}%0A`;
+        mensagem += `👤 *Cliente:* ${nome}%0A`;
+        mensagem += `🏠 *Endereço:* ${endereco} - ${bairro}%0A`;
+        mensagem += `💳 *Pagamento:* ${formaPagamento}`;
+
+        if (formaPagamento === 'Dinheiro' && troco) {
+            mensagem += `%0A💵 *Troco para:* ${troco}`;
+        }
+
+        const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+        window.open(url, '_blank');
+    }
+
+    function initModalEvents() {
+        const modal = document.getElementById('modal-obs');
+        modal.addEventListener('click', event => {
+            if (event.target === modal) {
+                fecharModal();
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && modal.style.display === 'flex') {
+                fecharModal();
+            }
+        });
+    }
+
+    window.onload = () => {
+        carregarCarrinho();
+        checarHorarioFuncionamento();
+        atualizarCarrinho();
+        initModalEvents();
+        filtrarCategoria('todos');
+    };
+</script>
+</body>
+</html>

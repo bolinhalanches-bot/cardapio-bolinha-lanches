@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cardápio - Bolinha Lanches</title>
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio - Bolinha Lanches</title>
+    <style>
+        /* Ajustes visuais para os acréscimos: fundo escuro e em coluna vertical (um embaixo do outro) */
+        .modal-acrescimos, .acrescimos-container, .extras-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background-color: #121212;
+            color: #ffffff;
+        }
 
-    html {
-        scroll-behavior: smooth;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #121212;
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
-    }
-
-    .hero-header {
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.75)), url('Gemini\_Generated\_Image\_iq05xoiq05xoiq05.png');
-        background-size: cover;
-        background-position: center;
-        padding: 50px 20px;
-        text-align: center;
-        border-bottom: 3px solid #ff9800;
+        /* Se houver checkboxes ou itens de acréscimo específicos */
+        .acrescimo-item, .modal-acrescimos label {
+            display: flex;
+            align-items: center;
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #333333;
+            color: #ffffff;
+            width: 100%;
     }
 
     .hero-header h1 {
@@ -97,8 +93,7 @@
 
     .section-hamburgueres,
     .section-pizzas,
-    .section-bebidas,
-    .section-acrescimos {
+    .section-bebidas {
         background-size: cover;
         background-position: center;
         padding: 18px;
@@ -119,10 +114,6 @@
 
     .section-bebidas {
         background-image: linear-gradient(rgba(18,18,18,0.8), rgba(18,18,18,0.8)), url('https://images.unsplash.com/photo-1543253687-c931c8e01820?auto=format&fit=crop&w=800&q=80');
-    }
-
-    .section-acrescimos {
-        background-image: linear-gradient(rgba(18,18,18,0.8), rgba(18,18,18,0.8)), url('https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?auto=format&fit=crop&w=800&q=80');
     }
 
     h2 {
@@ -276,6 +267,8 @@
         width: 100%;
         max-width: 420px;
         border: 1px solid #333;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     .modal-content h3 {
@@ -300,6 +293,7 @@
         justify-content: flex-end;
         gap: 10px;
         flex-wrap: wrap;
+        margin-top: 15px;
     }
 
     .btn-cancel {
@@ -319,6 +313,42 @@
         border-radius: 5px;
         cursor: pointer;
         font-weight: bold;
+    }
+
+    .acrescimos-box {
+        background: rgba(255, 152, 0, 0.05);
+        border: 1px dashed rgba(255, 152, 0, 0.4);
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+    }
+
+    .acrescimos-box label {
+        display: block;
+        color: #ffb74d;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .acrescimos-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .acrescimo-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #ddd;
+        cursor: pointer;
+    }
+
+    .acrescimo-item input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
     }
 
     #toast {
@@ -516,7 +546,6 @@
 <div class="category-nav">
     <button type="button" onclick="filtrarCategoria('todos')">📋 Todos</button>
     <button type="button" onclick="filtrarCategoria('hamburgueres')">🍔 Hambúrgueres</button>
-    <button type="button" onclick="filtrarCategoria('acrescimos')">🥓 Acréscimos</button>
     <button type="button" onclick="filtrarCategoria('pizzas')">🍕 Pizzas</button>
     <button type="button" onclick="filtrarCategoria('bebidas')">🥤 Bebidas</button>
     <a href="#carrinho-sec"><button type="button">🛒 Carrinho</button></a>
@@ -588,20 +617,6 @@
         </div>
     </section>
 
-    <section class="section-acrescimos" id="acrescimos-sec" data-category="acrescimos">
-        <h2>Acréscimos (Porções Extras)</h2>
-        <p style="font-size: 13px; color: #ccc;">Adicione ingredientes extras ao seu pedido</p>
-        <div class="sizes">
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Bife', '', 6.00, 'acrescimo')">+ Bife: R$ 6,00</button>
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Cheddar', '', 6.00, 'acrescimo')">+ Cheddar: R$ 6,00</button>
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Catupiry', '', 6.00, 'acrescimo')">+ Catupiry: R$ 6,00</button>
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Frango', '', 5.00, 'acrescimo')">+ Frango: R$ 5,00</button>
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Ovo', '', 2.00, 'acrescimo')">+ Ovo: R$ 2,00</button>
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Bacon', '', 6.00, 'acrescimo')">+ Bacon: R$ 6,00</button>
-            <button type="button" class="btn-size" onclick="abrirModal('Acréscimo: Calabresa', '', 6.00, 'acrescimo')">+ Calabresa: R$ 6,00</button>
-        </div>
-    </section>
-
     <section class="section-pizzas" id="pizzas-sec" data-category="pizzas">
         <h2>Pizzas</h2>
         <div class="item">
@@ -668,7 +683,7 @@
             <h3>Carne Desfiada com Catupiry</h3>
             <p>Molho de Tomate, Muçarela, Carne Desfiada, Catupiry, Orégano</p>
             <div class="sizes">
-                <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'P', 50.00, 'pizza')">P: R$ 50,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'P', 50.00, 'pizza')">P: R$ 50.00</button>
                 <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'M', 67.00, 'pizza')">M: R$ 67,00</button>
                 <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'G', 82.00, 'pizza')">G: R$ 82,00</button>
                 <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'GG', 93.00, 'pizza')">GG: R$ 93,00</button>
@@ -745,7 +760,7 @@
             <h3>🧃 Sucos</h3>
             <p>Opções Refrescantes</p>
             <div class="sizes">
-                <button type="button" class="btn-size" onclick="abrirModal('Suco Del Valle Lata', '', 6.00, 'bebida')">Del Valle Lata: R$ 6,00</button>
+                <button type="button" class="btn-size" onclick="abrirModal('Suco Del Valle Lata', '', 6.00, 'bebida')">Del Valle Lata: R$ 6.00</button>
                 <button type="button" class="btn-size" onclick="abrirModal('Suco Skinka 450ml', '', 5.00, 'bebida')">Skinka 450ml: R$ 5,00</button>
             </div>
         </div>
@@ -797,11 +812,26 @@
         <div id="bloco-borda" style="display: none;">
             <label style="color: #ffb74d; font-size: 14px;"><strong>Deseja Borda Recheada?</strong></label>
             <select id="select-borda">
-                <!-- As opções serão inseridas pelo JavaScript baseadas no tamanho -->
             </select>
         </div>
 
-        <p style="font-size: 13px; color: #ccc;">Ex: Sem Cebola, Sem Pimentão, Etc.</p>
+        <div id="bloco-acrescimos" style="display: none;">
+            <div class="acrescimos-box">
+                <label>🥓 Deseja Acréscimos Extras?</label>
+                <div class="acrescimos-grid">
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Bife" data-preco="6.00"> + Bife (R$ 6,00)</label>
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Cheddar" data-preco="6.00"> + Cheddar (R$ 6,00)</label>
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Catupiry" data-preco="6.00"> + Catupiry (R$ 6,00)</label>
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Frango" data-preco="5.00"> + Frango (R$ 5,00)</label>
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Ovo" data-preco="2.00"> + Ovo (R$ 2,00)</label>
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Bacon" data-preco="6.00"> + Bacon (R$ 6,00)</label>
+                    <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Calabresa" data-preco="6.00"> + Calabresa (R$ 6,00)</label>
+                </div>
+            </div>
+        </div>
+
+        <label style="color: #aaa; font-size: 13px; display: block; margin-top: 10px;"><strong>Observações:</strong></label>
+        <p style="font-size: 12px; color: #888; margin: 0 0 5px 0;">Ex: Sem Cebola, Ponto da carne, Etc.</p>
         <input type="text" id="input-obs" placeholder="Digite sua observação aqui...">
 
         <div class="modal-buttons">
@@ -894,27 +924,33 @@
 
         const blocoBorda = document.getElementById('bloco-borda');
         const selectBorda = document.getElementById('select-borda');
+        const blocoAcrescimos = document.getElementById('bloco-acrescimos');
+
+        // Limpar checkboxes de acréscimos anteriores
+        document.querySelectorAll('input[name="acrescimo"]').forEach(chk => chk.checked = false);
 
         if (tipo === 'pizza') {
             blocoBorda.style.display = 'block';
+            blocoAcrescimos.style.display = 'none';
             
-            // Define o preço da borda baseado no tamanho da pizza
             let precoBorda = 0;
             if (tamanho === 'P') precoBorda = 10.00;
             else if (tamanho === 'M') precoBorda = 12.00;
             else if (tamanho === 'G') precoBorda = 15.00;
             else if (tamanho === 'GG') precoBorda = 18.00;
             
-            // Atualiza as opções do select com os valores corretos
             selectBorda.innerHTML = `
                 <option value="0">Massa Tradicional (Sem Borda Recheada)</option>
                 <option value="${precoBorda}">Borda de Cheddar (+ R$ ${precoBorda.toFixed(2).replace('.', ',')})</option>
                 <option value="${precoBorda}">Borda de Catupiry (+ R$ ${precoBorda.toFixed(2).replace('.', ',')})</option>
             `;
-            
             selectBorda.value = '0';
+        } else if (tipo === 'lanche') {
+            blocoBorda.style.display = 'none';
+            blocoAcrescimos.style.display = 'block';
         } else {
             blocoBorda.style.display = 'none';
+            blocoAcrescimos.style.display = 'none';
         }
     }
 
@@ -938,9 +974,10 @@
             return;
         }
 
-        const obs = document.getElementById('input-obs').value.trim();
+        let obs = document.getElementById('input-obs').value.trim();
         let precoFinal = itemAtual.preco;
         let nomeFinal = itemAtual.nome;
+        let extrasTexto = [];
 
         if (itemAtual.tipo === 'pizza') {
             const selectBorda = document.getElementById('select-borda');
@@ -950,15 +987,31 @@
             if (valorBorda > 0) {
                 precoFinal += valorBorda;
                 const textoBorda = nomeBorda.split(' (+')[0];
-                nomeFinal += ` [Com ${textoBorda}]`;
+                extrasTexto.push(`Com ${textoBorda}`);
             }
+        } else if (itemAtual.tipo === 'lanche') {
+            const checkboxes = document.querySelectorAll('input[name="acrescimo"]:checked');
+            checkboxes.forEach(chk => {
+                const valorExtra = parseFloat(chk.dataset.preco);
+                precoFinal += valorExtra;
+                extrasTexto.push(`+ ${chk.value} (R$ ${valorExtra.toFixed(2).replace('.', ',')})`);
+            });
         }
 
-        const itemExistente = carrinho.find(item => item.nome === nomeFinal && item.obs === obs && item.preco === precoFinal);
+        // Montar observações completas combinando extras e notas do cliente
+        let obsCompleta = '';
+        if (extrasTexto.length > 0) {
+            obsCompleta += extrasTexto.join(', ');
+        }
+        if (obs) {
+            obsCompleta += (obsCompleta ? ' | ' : '') + obs;
+        }
+
+        const itemExistente = carrinho.find(item => item.nome === nomeFinal && item.obs === obsCompleta && item.preco === precoFinal);
         if (itemExistente) {
             itemExistente.quantidade += 1;
         } else {
-            carrinho.push({ nome: nomeFinal, preco: precoFinal, obs, quantidade: 1 });
+            carrinho.push({ nome: nomeFinal, preco: precoFinal, obs: obsCompleta, quantidade: 1 });
         }
 
         total = calcularTotal();
@@ -1125,23 +1178,22 @@
         const formaPagamento = document.getElementById('forma-pagamento').value;
         const troco = document.getElementById('cliente-troco').value.trim();
 
-        let mensagem = 'Olá! Gostaria de fazer um pedido no *Bolinha Lanches*:%0A%0A';
+        let mensagem = '🍔 *Novo Pedido*:%0A%0A';
 
         carrinho.forEach(item => {
-            mensagem += `✅ *${item.nome}* - R$ ${item.preco.toFixed(2).replace('.', ',')} x${item.quantidade} = R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}%0A`;
+            mensagem += `✅ ${item.quantidade}x *${item.nome}*%0A`;
             if (item.obs) {
                 mensagem += `   _Obs: ${item.obs}_%0A`;
             }
         });
 
-        mensagem += `%0A💰 *Total dos Itens:* R$ ${total.toFixed(2).replace('.', ',')}%0A`;
-        mensagem += `📦 *Tipo:* ${tipoPedido}%0A`;
+        mensagem += `%0A📦 *Tipo:* ${tipoPedido}%0A`;
         mensagem += `👤 *Cliente:* ${nome}%0A`;
         mensagem += `🏠 *Endereço:* ${endereco} - ${bairro}%0A`;
         mensagem += `💳 *Pagamento:* ${formaPagamento}`;
 
         if (formaPagamento === 'Dinheiro' && troco) {
-            mensagem += `%0A💵 *Troco para:* ${troco}`;
+            mensagem += ` (Troco para: R$ ${troco})`;
         }
 
         const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;

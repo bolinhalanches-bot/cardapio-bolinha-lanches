@@ -1191,14 +1191,13 @@
             }
         });
 
-        mensagem += `%0A📦 *Tipo:* ${tipoPedido}%0A`;
-        mensagem += `👤 *Cliente:* ${nome}%0A`;
-        mensagem += `🏠 *Endereço:* ${endereco} - ${bairro}%0A`;
-        mensagem += `💳 *Pagamento:* ${formaPagamento}`;
+       mensagem += `%0A📦 *Pedido:* ${tipoPedido}%0A`;
+       mensagem += `👤 *Cliente:* ${nome}%0A`;
+       mensagem += `🏠 *Endereço:* ${endereco} - ${bairro}%0A`;
 
-        if (formaPagamento === 'Dinheiro' && troco) {
-            mensagem += ` (Troco para: R$ ${troco})`;
-        }
+if (observacao) {
+    mensagem += `📝 *Obs.:* ${observacao}%0A`;
+}
 
         const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
         window.open(url, '_blank');

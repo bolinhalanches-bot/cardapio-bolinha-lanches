@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio - Bolinha Lanches</title>
-    <style>
-        /* Ajustes visuais para os acréscimos: fundo escuro e em coluna vertical (um embaixo do outro) */
-        .modal-acrescimos, .acrescimos-container, .extras-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background-color: #121212;
-            color: #ffffff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio - Bolinha Lanches</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        /* Se houver checkboxes ou itens de acréscimo específicos */
-        .acrescimo-item, .modal-acrescimos label {
-            display: flex;
-            align-items: center;
-            background-color: #1e1e1e;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #333333;
-            color: #ffffff;
-            width: 100%;
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-header {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.75)), url('Gemini\_Generated\_Image\_iq05xoiq05xoiq05.png');
+        background-size: cover;
+        background-position: center;
+        padding: 50px 20px;
+        text-align: center;
+        border-bottom: 3px solid #ff9800;
     }
 
     .hero-header h1 {

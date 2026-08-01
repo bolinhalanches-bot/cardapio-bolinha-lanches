@@ -19,6 +19,37 @@
         padding: 20px;
     }
 
+    /* =========================
+       BOTÃO DE TELA CHEIA
+    ========================= */
+    .btn-fullscreen {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 152, 0, 0.2);
+        color: #ff9800;
+        border: 1px solid #ff9800;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Aparece ao passar o mouse na região do canto */
+    body:hover .btn-fullscreen,
+    .btn-fullscreen:hover {
+        opacity: 1;
+    }
+
+    .btn-fullscreen:hover {
+        background: rgba(255, 152, 0, 0.4);
+        transform: scale(1.05);
+    }
+
     .container {
         max-width: 900px;
         margin: 0 auto;
@@ -357,6 +388,9 @@
 
 <body>
 
+<!-- Botão de Tela Cheia no Canto Superior Direito -->
+<button id="btnFullscreen" class="btn-fullscreen" title="Tela Cheia (Fullscreen)">⛶</button>
+
 <div id="notificacao" class="notificacao">
     🔔 Novo pedido recebido!
 </div>
@@ -403,7 +437,7 @@
 
     /*
     ============================================================
-    CONFIGURAÇÃO DO FIREBASE
+    CONFIGURAÇÃO DO FIREBASE (EXATA DO SEU CONSOLE)
     ============================================================
     */
 
@@ -446,6 +480,39 @@
 
     const notificacao =
         document.getElementById('notificacao');
+
+    const btnFullscreen =
+        document.getElementById('btnFullscreen');
+
+
+    /*
+    ============================================================
+    CONTROLE DE TELA CHEIA
+    ============================================================
+    */
+
+    btnFullscreen.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error("Erro ao tentar entrar em tela cheia:", err);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    });
+
+    // Altera o ícone do botão dependendo do estado da tela cheia
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            btnFullscreen.innerText = '🗗'; // Ícone para sair
+            btnFullscreen.title = 'Sair da Tela Cheia';
+        } else {
+            btnFullscreen.innerText = '⛶'; // Ícone para entrar
+            btnFullscreen.title = 'Tela Cheia (Fullscreen)';
+        }
+    });
 
 
     /*

@@ -3,661 +3,1766 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Painel Admin - Bolinha Lanches</title>
-
+<title>Cardápio - Bolinha Lanches</title>
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #121212;
-        color: #ffffff;
-        margin: 0;
-        padding: 20px;
-    }
+html {
+  scroll-behavior: smooth;
+}
 
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: #1e1e1e;
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid #ff9800;
-        box-shadow: 0 0 15px rgba(255, 152, 0, 0.2);
-    }
+body {
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
 
-    h1,
-    h2 {
-        color: #ff9800;
-        text-align: center;
-        border-bottom: 1px solid #333;
-        padding-bottom: 10px;
-    }
+.hero-header {
+  background: 
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.75)),
+    url('Gemini_Generated_Image_iq05xoiq05xoiq05.png');
+  background-size: cover;
+  background-position: center;
+  padding: 50px 20px;
+  text-align: center;
+  border-bottom: 3px solid #ff9800;
+}
 
-    h1 {
-        margin-top: 0;
-    }
+.hero-header h1 {
+  color: #ffffff;
+  margin: 0;
+  font-size: 42px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
 
-    /* =========================
-       MÉTRICAS
-    ========================= */
+.hero-header h1 span.emoji {
+  font-size: 1.2em;
+}
 
-    .metrics-grid {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 25px;
-    }
+.hero-header p {
+  color: #ffb74d;
+  margin: 15px 0 0 0;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: italic;
+}
 
-    .metric-card {
-        background: #2a2a2a;
-        padding: 15px 30px;
-        border-radius: 6px;
-        border-top: 3px solid #ff9800;
-        text-align: center;
-        min-width: 220px;
-    }
+.status-loja {
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  white-space: normal;
+}
 
-    .metric-card h4 {
-        margin: 0;
-        color: #aaa;
-        font-size: 14px;
-    }
+.aberto {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+}
 
-    .metric-card p {
-        margin: 8px 0 0;
-        font-size: 28px;
-        font-weight: bold;
-        color: #ffb74d;
-    }
+.fechado {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+}
 
-    /* =========================
-       CARD DO PEDIDO
-    ========================= */
+.aviso-tempo {
+  text-align: center;
+  padding: 10px;
+  background-color: rgba(255, 152, 0, 0.1);
+  color: #ffb74d;
+  border: 1px dashed #ff9800;
+  border-radius: 5px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
 
-    .pedido-card {
-        background: #2a2a2a;
-        border-left: 5px solid #ff9800;
-        padding: 18px;
-        border-radius: 6px;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
+.container {
+  max-width: 620px;
+  margin: 20px auto;
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
 
-    .pedido-card.pedido-novo {
-        animation: destaqueNovo 1.2s ease-in-out;
-    }
+.section-hamburgueres,
+.section-pizzas,
+.section-bebidas {
+  background-size: cover;
+  background-position: center;
+  padding: 18px;
+  border-radius: 8px;
+  margin-top: 30px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 152, 0, 0.15);
+}
 
-    @keyframes destaqueNovo {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 0 rgba(255, 152, 0, 0);
-        }
+.section-hamburgueres {
+  background-image: 
+    linear-gradient(rgba(18,18,18,0.75), rgba(18,18,18,0.75)),
+    url('WhatsApp Image 2026-07-25 at 02.05.28 (3).jpeg');
+}
 
-        50% {
-            transform: scale(1.01);
-            box-shadow: 0 0 25px rgba(255, 152, 0, 0.8);
-        }
+.section-pizzas {
+  background-image: 
+    linear-gradient(rgba(18,18,18,0.75), rgba(18,18,18,0.75)),
+    url('WhatsApp Image 2026-07-25 at 02.05.28 (1).jpeg');
+}
 
-        100% {
-            transform: scale(1);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-    }
+.section-bebidas {
+  background-image: 
+    linear-gradient(rgba(18,18,18,0.8), rgba(18,18,18,0.8)),
+    url('https://images.unsplash.com/photo-1543253687-c931c8e01820?auto=format&fit=crop&w=800&q=80');
+}
 
-    .pedido-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        border-bottom: 1px solid #444;
-        padding-bottom: 10px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-    }
+h2 {
+  color: #ff9800;
+  border-bottom: 1px solid #333;
+  padding-bottom: 6px;
+  margin-top: 0;
+}
 
-    .pedido-header h3 {
-        margin: 0;
-        color: #ffb74d;
-        font-size: 20px;
-    }
+.category-nav {
+  position: sticky;
+  top: 0;
+  background-color: #121212;
+  padding: 15px 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  overflow-x: auto;
+  z-index: 100;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  white-space: nowrap;
+}
 
-    .pedido-data {
-        color: #aaa;
-        font-size: 12px;
-    }
+.category-nav::-webkit-scrollbar {
+  display: none;
+}
 
-    /* =========================
-       STATUS
-    ========================= */
+.category-nav a {
+  text-decoration: none;
+}
 
-    .badge-status {
-        padding: 5px 9px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
+.category-nav button {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
 
-    .status-pendente {
-        background: #e67e22;
-        color: #fff;
-    }
+.category-nav button:hover,
+.category-nav button.active {
+  background: #ff9800;
+  color: #121212;
+  border-color: #ff9800;
+}
 
-    .status-preparo {
-        background: #3498db;
-        color: #fff;
-    }
+.categoria-oculta {
+  display: none !important;
+}
 
-    .status-pronto {
-        background: #27ae60;
-        color: #fff;
-    }
+.item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+}
 
-    /* =========================
-       CORPO DO PEDIDO
-    ========================= */
+.item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
 
-    .pedido-body p {
-        margin: 9px 0;
-        line-height: 1.5;
-        font-size: 15px;
-    }
+.item-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
 
-    .pedido-body strong {
-        color: #ffb74d;
-    }
+.item-foto {
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #333;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
 
-    .cliente-destaque {
-        color: #ffffff;
-        font-size: 17px;
-        font-weight: bold;
-    }
+.item-foto:hover {
+  transform: scale(1.05);
+  border-color: #ff9800;
+}
 
-    .obs-destaque {
-        color: #ff5252;
-        font-weight: bold;
-    }
+.item-textos {
+  flex: 1;
+}
 
-    .acrescimo-destaque {
-        color: #27ae60;
-        font-weight: bold;
-    }
+.item h3 {
+  color: #ff9800;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .pizza-meio {
-        background: rgba(255, 152, 0, 0.12);
-        border: 1px dashed #ff9800;
-        color: #ffb74d;
-        padding: 10px;
-        border-radius: 6px;
-        margin: 10px 0;
-        font-weight: bold;
-    }
+.item p {
+  font-size: 13px;
+  color: #dddddd;
+  margin: 0;
+  line-height: 1.5;
+}
 
-    .itens-pedido {
-        background: #222222;
-        border-radius: 6px;
-        padding: 12px;
-        margin-top: 10px;
-    }
+.sizes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
 
-    .item-pedido {
-        padding: 8px 0;
-        border-bottom: 1px solid #444;
-    }
+.btn-size,
+.btn-add,
+.btn-remover,
+.btn-cancel,
+.btn-confirm,
+.btn-finalizar {
+  transition: 0.2s ease;
+}
 
-    .item-pedido:last-child {
-        border-bottom: none;
-    }
+.btn-size {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #555;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+}
 
-    .item-nome {
-        color: #ffffff;
-        font-weight: bold;
-    }
+.btn-size:hover {
+  background: #333;
+  border-color: #ff9800;
+  color: #ff9800;
+}
 
-    .item-obs {
-        color: #ffb74d;
-        font-size: 13px;
-        margin-top: 4px;
-    }
+.btn-add {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #ff9800;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
 
-    .valor-total {
-        font-size: 19px;
-        color: #ff9800;
-        font-weight: bold;
-    }
+.btn-add:hover {
+  background: #ff9800;
+  color: #121212;
+}
 
-    /* =========================
-       AÇÕES
-    ========================= */
+#modal-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
 
-    .actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 15px;
-        border-top: 1px solid #444;
-        padding-top: 12px;
-    }
+#img-ampliada {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(255, 152, 0, 0.4);
+}
 
-    .btn {
-        border: none;
-        padding: 9px 14px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 13px;
-        transition: opacity 0.2s, transform 0.2s;
-    }
+.btn-fechar-lightbox {
+  margin-top: 20px;
+  background: transparent;
+  color: #ff9800;
+  border: 2px solid #ff9800;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
 
-    .btn:hover {
-        opacity: 0.85;
-        transform: translateY(-1px);
-    }
+.btn-fechar-lightbox:hover {
+  background: #ff9800;
+  color: #121212;
+}
 
-    .btn-preparo {
-        background: #3498db;
-        color: white;
-    }
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  padding: 20px;
+}
 
-    .btn-pronto {
-        background: #27ae60;
-        color: white;
-    }
+.modal-content {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid #333;
+  max-height: 90vh;
+  overflow-y: auto;
+}
 
-    .btn-concluir {
-        background: #7f8c8d;
-        color: white;
-    }
+.modal-content h3 {
+  color: #ff9800;
+  margin-top: 0;
+  font-size: 18px;
+}
 
-    /* =========================
-       ESTADO VAZIO
-    ========================= */
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 15px 0;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background: #2c2c2c;
+  color: white;
+}
 
-    .estado-vazio {
-        text-align: center;
-        color: #aaa;
-        padding: 30px 10px;
-        font-size: 15px;
-    }
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
 
-    /* =========================
-       NOTIFICAÇÃO
-    ========================= */
+.btn-cancel {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-    .notificacao {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #27ae60;
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        font-weight: bold;
-        z-index: 999;
-        display: none;
-        max-width: 320px;
-    }
+.btn-confirm {
+  background: #ff9800;
+  color: #121212;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-    .notificacao.show {
-        display: block;
-        animation: aparecerNotificacao 0.3s ease;
-    }
+.acrescimos-box {
+  background: rgba(255, 152, 0, 0.05);
+  border: 1px dashed rgba(255, 152, 0, 0.4);
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
 
-    @keyframes aparecerNotificacao {
-        from {
-            opacity: 0;
-            transform: translateY(-15px);
-        }
+.acrescimos-box label {
+  display: block;
+  color: #ffb74d;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+.acrescimos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
 
-    /* =========================
-       RESPONSIVO
-    ========================= */
+.acrescimo-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #ddd;
+  cursor: pointer;
+}
 
-    @media (max-width: 600px) {
-        body {
-            padding: 10px;
-        }
+.acrescimo-item input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
 
-        .container {
-            padding: 14px;
-        }
+.meio-a-meio-box {
+  background: rgba(255, 152, 0, 0.08);
+  border: 1px dashed #ff9800;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
 
-        .pedido-header {
-            align-items: flex-start;
-        }
+.meio-a-meio-box label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffb74d;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
 
-        .actions {
-            flex-direction: column;
-        }
+.meio-a-meio-box input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
 
-        .btn {
-            width: 100%;
-        }
+.sabores-meio-box {
+  display: none;
+  margin-top: 10px;
+}
 
-        .notificacao {
-            left: 10px;
-            right: 10px;
-            top: 10px;
-            max-width: none;
-        }
-    }
+.sabores-meio-box label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ccc;
+  font-size: 13px;
+}
+
+.sabores-meio-box select {
+  margin-bottom: 10px;
+}
+
+.preco-meio-a-meio {
+  color: #4CAF50;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+#toast {
+  visibility: hidden;
+  min-width: 280px;
+  max-width: calc(100% - 30px);
+  background-color: #4CAF50;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 15px;
+  position: fixed;
+  z-index: 300;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+#toast.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+#toast.erro {
+  background-color: #e74c3c;
+}
+
+@keyframes fadein {
+  from { bottom: 0; opacity: 0; }
+  to { bottom: 30px; opacity: 1; }
+}
+@keyframes fadeout {
+  from { bottom: 30px; opacity: 1; }
+  to { bottom: 0; opacity: 0; }
+}
+
+.cart {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px dashed #ff9800;
+}
+
+.cart-item {
+  margin-bottom: 12px;
+  font-size: 15px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-item-info {
+  flex-grow: 1;
+}
+
+.cart-obs {
+  font-size: 13px;
+  color: #ffb74d;
+  font-style: italic;
+  display: block;
+  margin-top: 4px;
+}
+
+.btn-remover {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.btn-remover:hover {
+  background: #c0392b;
+}
+
+.btn-remover:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.total {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 15px;
+  color: #ff9800;
+}
+
+.cart-summary {
+  font-size: 15px;
+  color: #ccc;
+  margin-top: 8px;
+}
+
+.cart-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.cart-controls span {
+  min-width: 30px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+#btn-limpar {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+}
+
+#btn-limpar:hover {
+  background: #777;
+}
+
+#btn-limpar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.opcoes-pedido {
+  margin-top: 20px;
+  background: #252525;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.opcoes-pedido label {
+  display: block;
+  margin-top: 12px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.opcoes-pedido select,
+.opcoes-pedido input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #1e1e1e;
+  color: white;
+  font-size: 15px;
+}
+
+.campo-endereco {
+  transition: 0.2s ease;
+}
+
+.campo-endereco.oculto {
+  display: none;
+}
+
+.aviso-retirada {
+  display: none;
+  background: rgba(52, 152, 219, 0.15);
+  border: 1px solid #3498db;
+  color: #8ecaf0;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.aviso-retirada.visivel {
+  display: block;
+}
+
+.btn-finalizar {
+  background: #ff9800;
+  color: #121212;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-finalizar:hover {
+  background: #e68a00;
+}
+
+.btn-finalizar:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.btn-finalizar.enviando {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.pedido-sucesso {
+  display: none;
+  background: rgba(76, 175, 80, 0.12);
+  border: 1px solid #4CAF50;
+  color: #8ee28f;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+.pedido-sucesso.visivel {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 10px;
+    padding: 16px;
+  }
+  .hero-header h1 {
+    font-size: 30px;
+  }
+  .sizes {
+    flex-direction: column;
+  }
+  .btn-size, .btn-add {
+    width: 100%;
+  }
+  .modal-content {
+    max-width: 100%;
+  }
+  .acrescimos-grid {
+    grid-template-columns: 1fr;
+  }
+  .cart-item {
+    align-items: flex-start;
+  }
+}
 </style>
-
 </head>
 
 <body>
 
-<div id="notificacao" class="notificacao">
-    🔔 Novo pedido recebido!
+<!-- MENU DE CATEGORIAS -->
+<div class="category-nav">
+  <button type="button" onclick="filtrarCategoria('todos')">📋 Todos</button>
+  <button type="button" onclick="filtrarCategoria('hamburgueres')">🍔 Hambúrgueres</button>
+  <button type="button" onclick="filtrarCategoria('pizzas')">🍕 Pizzas</button>
+  <button type="button" onclick="filtrarCategoria('bebidas')">🥤 Bebidas</button>
+  <a href="#carrinho-sec">
+    <button type="button">🛒 Carrinho</button>
+  </a>
+</div>
+
+<!-- CABEÇALHO -->
+<div class="hero-header">
+  <h1>
+    <span class="emoji">🍔</span>
+    Bolinha Lanches
+    <span class="emoji">🍕</span>
+  </h1>
+  <p>O lanche do tamanho da sua fome</p>
 </div>
 
 <div class="container">
 
-    <h1>🍔 Painel de Administração - Bolinha Lanches</h1>
+  <div id="status-loja" class="status-loja" aria-live="polite">
+    Verificando horário...
+  </div>
 
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <h4>Pedidos Ativos</h4>
-            <p id="total-pendentes">0</p>
+  <div class="aviso-tempo">
+    ⏳ <strong>Atenção:</strong> 
+    O tempo estimado de preparo e entrega será informado pelo atendente ao receber seu pedido.
+  </div>
+
+  <!-- ==================== HAMBÚRGUERES ==================== -->
+  <section class="section-hamburgueres" id="hamburgueres-sec" data-category="hamburgueres">
+    <h2>Hambúrgueres</h2>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="Hamburger.jpeg" alt="Hambúrguer" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>Hambúrguer</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate</p>
         </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('Hambúrguer', '', 18.00, 'lanche')">
+        R$ 18,00 - Adicionar
+      </button>
     </div>
 
-    <h2>📋 Pedidos Recebidos em Tempo Real</h2>
-
-    <div id="lista-pedidos">
-        <div class="estado-vazio">
-            Aguardando novos pedidos...
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Burguer.jpeg" alt="X-Burguer" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Burguer</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela</p>
         </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Burguer', '', 23.00, 'lanche')">
+        R$ 23,00 - Adicionar
+      </button>
     </div>
 
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Egg Burguer.jpeg" alt="X-Egg Burguer" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Egg Burguer</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Ovo</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Egg Burguer', '', 25.00, 'lanche')">
+        R$ 25,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Calabresa.jpeg" alt="X-Calabresa" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Calabresa</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Calabresa</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Calabresa', '', 28.00, 'lanche')">
+        R$ 28,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Bacon.jpeg" alt="X-Bacon" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Bacon</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Bacon', '', 28.00, 'lanche')">
+        R$ 28,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Egg Bacon.jpeg" alt="X-Egg Bacon" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Egg Bacon</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Ovo, Bacon</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Egg Bacon', '', 30.00, 'lanche')">
+        R$ 30,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Egg Calabresa.jpeg" alt="X-Egg Calabresa" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Egg Calabresa</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Ovo, Calabresa</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Egg Calabresa', '', 30.00, 'lanche')">
+        R$ 30,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Tudo.jpg.jpeg" alt="X-Tudo" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Tudo</h3>
+          <p>Pão de Hambúrguer, Bife, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon, Ovo, Frango, Catupiry, Cheddar</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Tudo', '', 35.00, 'lanche')">
+        R$ 35,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Tudão.jpeg.jpeg" alt="X-Tudão" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Tudão</h3>
+          <p>Pão de Hambúrguer, 2 Bifes, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon, Ovo, Frango, Catupiry, Cheddar</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Tudão', '', 38.00, 'lanche')">
+        R$ 38,00 - Adicionar
+      </button>
+    </div>
+
+    <div class="item">
+      <div class="item-conteudo">
+        <img src="X Bolinha.jpeg" alt="X-Bolinha" class="item-foto" onclick="abrirLightbox(this.src)">
+        <div class="item-textos">
+          <h3>X-Bolinha</h3>
+          <p>Pão de Hambúrguer, 2 Bifes, Milho, Batata Palha, Tomate, Presunto, Muçarela, Bacon, Ovo, Frango, Catupiry, Cheddar, Calabresa</p>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="abrirModal('X-Bolinha', '', 40.00, 'lanche')">
+        R$ 40,00 - Adicionar
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== PIZZAS ==================== -->
+  <section class="section-pizzas" id="pizzas-sec" data-category="pizzas">
+    <h2>Pizzas</h2>
+
+    <div class="item">
+      <h3>Moda da Casa</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Cebola, Azeitona, Calabresa, Palmito, Tomate, Ovo, Milho, Frango, Bacon, Orégano, Pimentão</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'P', 50.00, 'pizza')">P: R$ 50,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'M', 67.00, 'pizza')">M: R$ 67,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'G', 82.00, 'pizza')">G: R$ 82,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Moda da Casa', 'GG', 94.00, 'pizza')">GG: R$ 94,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Palmito</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Tomate, Palmito, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'P', 48.00, 'pizza')">P: R$ 48,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'M', 64.00, 'pizza')">M: R$ 64,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'G', 79.00, 'pizza')">G: R$ 79,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Palmito', 'GG', 90.00, 'pizza')">GG: R$ 90,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Portuguesa</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Cebola, Azeitona, Calabresa, Tomate, Ovo, Orégano, Pimentão</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'M', 65.00, 'pizza')">M: R$ 65,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Portuguesa', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Calabresa</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Calabresa, Cebola, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Calabresa', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Bacon</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Milho, Bacon, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Bacon', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Frango com Catupiry</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Milho, Frango, Catupiry, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'P', 49.00, 'pizza')">P: R$ 49,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'M', 66.00, 'pizza')">M: R$ 66,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'G', 80.00, 'pizza')">G: R$ 80,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Frango com Catupiry', 'GG', 92.00, 'pizza')">GG: R$ 92,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Carne Desfiada com Catupiry</h3>
+      <p>Molho de Tomate, Muçarela, Carne Desfiada, Catupiry, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'P', 50.00, 'pizza')">P: R$ 50,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'M', 67.00, 'pizza')">M: R$ 67,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'G', 82.00, 'pizza')">G: R$ 82,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Carne Desfiada com Catupiry', 'GG', 93.00, 'pizza')">GG: R$ 93,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Napolitana</h3>
+      <p>Molho de Tomate, Muçarela, Presunto, Tomate, Azeitona, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'P', 45.00, 'pizza')">P: R$ 45,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'M', 62.00, 'pizza')">M: R$ 62,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'G', 75.00, 'pizza')">G: R$ 75,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Napolitana', 'GG', 86.00, 'pizza')">GG: R$ 86,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>Vegetariana</h3>
+      <p>Molho de Tomate, Muçarela, Cebola, Azeitona, Tomate, Pimentão, Milho, Palmito, Catupiry, Orégano</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Vegetariana', 'P', 47.00, 'pizza')">P: R$ 47,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Vegetariana', 'M', 63.00, 'pizza')">M: R$ 63,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Vegetariana', 'G', 77.00, 'pizza')">G: R$ 77,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pizza Vegetariana', 'GG', 87.00, 'pizza')">GG: R$ 87,00</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== BEBIDAS ==================== -->
+  <section class="section-bebidas" id="bebidas-sec" data-category="bebidas">
+    <h2>Bebidas</h2>
+
+    <div class="item">
+      <h3>🥤 Refrigerantes 2L</h3>
+      <p>Opções Tradicionais</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola 2L', '', 15.00, 'bebida')">Coca-Cola: R$ 15,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pepsi 2L', '', 13.00, 'bebida')">Pepsi: R$ 13,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Guaraná 2L', '', 13.00, 'bebida')">Guaraná: R$ 13,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Sukita 2L', '', 13.00, 'bebida')">Sukita: R$ 13,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>🥤 Refrigerantes 1L</h3>
+      <p>Tamanho Médio</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola 1L', '', 10.00, 'bebida')">Coca-Cola: R$ 10,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Pepsi 1L', '', 8.00, 'bebida')">Pepsi: R$ 8,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Guaraná 1L', '', 8.00, 'bebida')">Guaraná: R$ 8,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>🥫 Refrigerantes Lata (350ml)</h3>
+      <p>Tamanho Individual</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola Lata', '', 5.00, 'bebida')">Coca-Cola: R$ 5,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Guaraná Lata', '', 5.50, 'bebida')">Guaraná: R$ 5,50</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Sukita Lata', '', 5.00, 'bebida')">Sukita: R$ 5,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>🥫 Refrigerantes Mini</h3>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Mini Coca-Cola', '', 3.00, 'bebida')">Mini Coca: R$ 3,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>🥤🥫 Linha Zero Açúcar</h3>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola Zero 2L', '', 15.00, 'bebida')">Coca Zero 2L: R$ 15,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Guaraná Zero 2L', '', 15.00, 'bebida')">Guaraná Zero 2L: R$ 15,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Coca-Cola Zero Lata', '', 5.00, 'bebida')">Coca Zero Lata: R$ 5,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Guaraná Zero Lata', '', 5.00, 'bebida')">Guaraná Zero Lata: R$ 5,00</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3>🧃 Sucos</h3>
+      <p>Opções Refrescantes</p>
+      <div class="sizes">
+        <button type="button" class="btn-size" onclick="abrirModal('Suco Del Valle Lata', '', 6.00, 'bebida')">Del Valle Lata: R$ 6,00</button>
+        <button type="button" class="btn-size" onclick="abrirModal('Suco Skinka 450ml', '', 5.00, 'bebida')">Skinka 450ml: R$ 5,00</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CARRINHO ==================== -->
+  <section class="cart" id="carrinho-sec">
+    <h2>🛒 Seu Pedido</h2>
+
+    <div id="itens-carrinho" style="color: #ccc;">
+      Nenhum item adicionado ainda.
+    </div>
+
+    <div class="cart-summary" id="cart-summary">
+      Quantidade de itens: 0
+    </div>
+
+    <div class="total" id="total-carrinho">
+      Total: R$ 0,00
+    </div>
+
+    <button type="button" id="btn-limpar" class="btn-remover" onclick="limparCarrinho()">
+      Limpar Carrinho
+    </button>
+
+    <div class="opcoes-pedido">
+      <label for="tipo-pedido"><strong>Como deseja receber?</strong></label>
+      <select id="tipo-pedido" onchange="atualizarTipoPedido()">
+        <option value="Receber em Casa (Entrega)">🛵 Receber em Casa (Entrega)</option>
+        <option value="Buscar na Loja (Retirada)">🥡 Buscar na Loja (Retirada)</option>
+      </select>
+
+      <div id="aviso-retirada" class="aviso-retirada">
+        🥡 Você escolheu retirar na loja. Informe apenas seu nome. O endereço não será necessário.
+      </div>
+
+      <label for="cliente-nome"><strong>Seu Nome Completo:</strong></label>
+      <input type="text" id="cliente-nome" placeholder="Ex: João da Silva">
+
+      <div id="campos-endereco" class="campo-endereco">
+        <label for="cliente-endereco"><strong>Endereço (Rua e Número):</strong></label>
+        <input type="text" id="cliente-endereco" placeholder="Ex: Rua das Flores, 123">
+
+        <label for="cliente-bairro"><strong>Bairro:</strong></label>
+        <input type="text" id="cliente-bairro" placeholder="Ex: Centro">
+      </div>
+
+      <label for="forma-pagamento"><strong>Forma de Pagamento:</strong></label>
+      <select id="forma-pagamento" onchange="verificarPagamento()">
+        <option value="Pix">PIX</option>
+        <option value="Dinheiro">Dinheiro</option>
+      </select>
+
+      <div id="bloco-troco" style="display: none;">
+        <label for="cliente-troco"><strong>Troco para quanto?</strong></label>
+        <input type="text" id="cliente-troco" placeholder="Ex: 50,00" inputmode="decimal">
+      </div>
+    </div>
+
+    <button type="button" id="btn-finalizar" class="btn-finalizar" onclick="finalizarPedido()">
+      Finalizar Pedido
+    </button>
+
+    <div id="pedido-sucesso" class="pedido-sucesso">
+      <strong>✅ Pedido enviado com sucesso!</strong><br>
+      Seu pedido já foi recebido pelo Bolinha Lanches.<br>
+      Aguarde a confirmação do atendente.
+    </div>
+  </section>
+
+</div> <!-- FIM CONTAINER -->
+
+<!-- MODAL DE LIGHTBOX (PARA ABRIR A FOTO GRANDE) -->
+<div id="modal-lightbox" onclick="fecharLightbox()">
+  <img id="img-ampliada" src="" alt="Imagem ampliada do lanche">
+  <button class="btn-fechar-lightbox" onclick="fecharLightbox()">Fechar Imagem</button>
 </div>
 
+<!-- ==================== MODAL DE ITEM (ADICIONAR/OBS) ==================== -->
+<div class="modal" id="modal-obs" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-content">
+    <h3 id="modal-title">Adicionar Item</h3>
+
+    <!-- MEIO A MEIO -->
+    <div id="bloco-meio-a-meio" class="meio-a-meio-box" style="display: none;">
+      <label>
+        <input type="checkbox" id="checkbox-meio-a-meio" onchange="alternarMeioAMeio()">
+        🍕 Quero esta pizza meio a meio
+      </label>
+
+      <div id="sabores-meio-box" class="sabores-meio-box">
+        <label for="sabor-meio-1">Primeiro sabor:</label>
+        <select id="sabor-meio-1" onchange="atualizarPrecoMeioAMeio()"></select>
+
+        <label for="sabor-meio-2">Segundo sabor:</label>
+        <select id="sabor-meio-2" onchange="atualizarPrecoMeioAMeio()"></select>
+
+        <div id="preco-meio-a-meio" class="preco-meio-a-meio">
+          Preço da pizza: R$ 0,00
+        </div>
+      </div>
+    </div>
+
+    <!-- BORDA -->
+    <div id="bloco-borda" style="display: none;">
+      <label style="color: #ffb74d; font-size: 14px;"><strong>Deseja Borda Recheada?</strong></label>
+      <select id="select-borda"></select>
+    </div>
+
+    <!-- ACRÉSCIMOS -->
+    <div id="bloco-acrescimos" style="display: none;">
+      <div class="acrescimos-box">
+        <label>🥓 Deseja Acréscimos Extras?</label>
+        <div class="acrescimos-grid">
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Bife" data-preco="6.00"> + Bife (R$ 6,00)</label>
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Cheddar" data-preco="6.00"> + Cheddar (R$ 6,00)</label>
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Catupiry" data-preco="6.00"> + Catupiry (R$ 6,00)</label>
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Frango" data-preco="5.00"> + Frango (R$ 5,00)</label>
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Ovo" data-preco="2.00"> + Ovo (R$ 2,00)</label>
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Bacon" data-preco="6.00"> + Bacon (R$ 6,00)</label>
+          <label class="acrescimo-item"><input type="checkbox" name="acrescimo" value="Calabresa" data-preco="6.00"> + Calabresa (R$ 6,00)</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBSERVAÇÕES -->
+    <label style="color: #aaa; font-size: 13px; display: block; margin-top: 10px;" for="input-obs">
+      <strong>Observações:</strong>
+    </label>
+    <p style="font-size: 12px; color: #888; margin: 0 0 5px 0;">Ex: Sem Cebola, Ponto da carne, etc.</p>
+    <input type="text" id="input-obs" placeholder="Digite sua observação aqui...">
+
+    <div class="modal-buttons">
+      <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button type="button" class="btn-confirm" onclick="adicionarAoCarrinho()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">Item adicionado com sucesso! ✅</div>
+
+<!-- ========================================================= -->
+<!-- FIREBASE E SCRIPTS -->
+<!-- ========================================================= -->
+
 <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    import {
-        initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyAYEgCz2kMGnMqVZDPWiMgxgLWjNQMxeqA",
+  authDomain: "bolinha-lanches-ae5ad.firebaseapp.com",
+  databaseURL: "https://bolinha-lanches-ae5ad-default-rtdb.firebaseio.com",
+  projectId: "bolinha-lanches-ae5ad",
+  storageBucket: "bolinha-lanches-ae5ad.firebasestorage.app",
+  messagingSenderId: "971256696839",
+  appId: "1:971256696839:web:a1d0f4888cf75c28b09aa2",
+  measurementId: "G-1674758XZN"
+};
 
-    import {
-        getDatabase,
-        ref,
-        onValue,
-        update,
-        remove
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-
-    /*
-    ============================================================
-    CONFIGURAÇÃO DO FIREBASE
-    ============================================================
-    */
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAYEgCz2kMGnMqVZDPWiMgxgLWjNQMxeqA",
-        authDomain: "bolinha-lanches-ae5ad.firebaseapp.com",
-        databaseURL: "https://bolinha-lanches-ae5ad-default-rtdb.firebaseio.com",
-        projectId: "bolinha-lanches-ae5ad",
-        storageBucket: "bolinha-lanches-ae5ad.firebasestorage.app",
-        messagingSenderId: "971256696839",
-        appId: "1:971256696839:web:a1d0f4888cf75c28b09aa2",
-        measurementId: "G-1674758XZN"
-    };
-
-
-    /*
-    ============================================================
-    INICIALIZA FIREBASE
-    ============================================================
-    */
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-
-    /*
-    ============================================================
-    ELEMENTOS DA PÁGINA
-    ============================================================
-    */
-
-    const listaPedidosDiv = document.getElementById('lista-pedidos');
-    const totalPendentesElem = document.getElementById('total-pendentes');
-    const notificacao = document.getElementById('notificacao');
-
-
-    /*
-    ============================================================
-    ÁUDIO DE NOVO PEDIDO
-    ============================================================
-    */
-
-    const audioNotificacao = new Audio(
-        'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'
-    );
-
-    let qtdPedidosAnterior = 0;
-    let primeiraLeitura = true;
-
-
-    /*
-    ============================================================
-    REFERÊNCIA DOS PEDIDOS
-    ============================================================
-    */
-
-    const pedidosRef = ref(db, 'pedidos');
-
-
-    /*
-    ============================================================
-    ESCUTA EM TEMPO REAL
-    ============================================================
-    */
-
-    onValue(pedidosRef, (snapshot) => {
-
-        const dados = snapshot.val();
-        listaPedidosDiv.innerHTML = '';
-
-
-        /* NENHUM PEDIDO */
-        if (!dados) {
-            listaPedidosDiv.innerHTML = `
-                <div class="estado-vazio">
-                    Nenhum pedido pendente no momento.
-                </div>
-            `;
-            totalPendentesElem.innerText = '0';
-            qtdPedidosAnterior = 0;
-            primeiraLeitura = false;
-            return;
-        }
-
-        const idsPedidos = Object.keys(dados);
-
-        /* NOTIFICAÇÃO DE NOVO PEDIDO */
-        if (!primeiraLeitura && idsPedidos.length > qtdPedidosAnterior) {
-            audioNotificacao.play().catch(() => {
-                console.log('O navegador bloqueou o áudio.');
-            });
-            mostrarNotificacao('🔔 Novo pedido recebido!');
-        }
-
-        qtdPedidosAnterior = idsPedidos.length;
-        primeiraLeitura = false;
-
-        /* ORDENA PEDIDOS */
-        idsPedidos.sort((a, b) => {
-            const dataA = dados[a]?.data ? new Date(dados[a].data).getTime() : 0;
-            const dataB = dados[b]?.data ? new Date(dados[b].data).getTime() : 0;
-            return dataB - dataA;
-        });
-
-        /* RENDERIZA CADA PEDIDO */
-        idsPedidos.forEach((idPedido) => {
-            const pedido = dados[idPedido];
-
-            const status = pedido.status || 'Pendente';
-            const statusClass = getStatusClass(status);
-            const valorNumerico = parseFloat(pedido.valor) || 0;
-
-            let horarioPedido = 'Recente';
-            if (pedido.data) {
-                const dataPedido = new Date(pedido.data);
-                if (!isNaN(dataPedido.getTime())) {
-                    horarioPedido = dataPedido.toLocaleString('pt-BR', {
-                        day: '2-digit', month: '2-digit', year: 'numeric',
-                        hour: '2-digit', minute: '2-digit'
-                    });
-                }
-            }
-
-            const cliente = pedido.cliente || pedido.nome || 'Não informado';
-            const endereco = pedido.endereco || 'Retirada no Balcão';
-            const tipoPedido = pedido.tipo || pedido.tipoPedido || 'Não informado';
-            const pagamento = pedido.pagamento || pedido.formaPagamento || 'A combinar';
-            const troco = pedido.troco && pedido.troco !== 'Não necessário' ? pedido.troco : null;
-
-            const div = document.createElement('div');
-            div.className = 'pedido-card';
-
-            /* ITENS DO PEDIDO */
-            let itensHTML = '';
-            if (Array.isArray(pedido.itens)) {
-                pedido.itens.forEach(item => {
-                    itensHTML += `
-                        <div class="item-pedido">
-                            <div class="item-nome">
-                                ${escapeHTML(item.quantidade || 1)}x ${escapeHTML(item.nome || 'Item')}
-                            </div>
-                            ${item.obs ? `<div class="item-obs">📝 Obs: ${escapeHTML(item.obs)}</div>` : ''}
-                        </div>
-                    `;
-                });
-            } else if (pedido.itens) {
-                itensHTML = `
-                    <div class="item-pedido">
-                        <div class="item-nome">${escapeHTML(String(pedido.itens))}</div>
-                    </div>
-                `;
-            }
-
-            /* PIZZA MEIO A MEIO */
-            let pizzaMeioHTML = '';
-            if (pedido.meioAMeio) {
-                pizzaMeioHTML = `
-                    <div class="pizza-meio">
-                        🍕 Pizza Meio a Meio: ${escapeHTML(pedido.meioAMeio.sabor1 || pedido.meioAMeio.primeiroSabor || '')} + ${escapeHTML(pedido.meioAMeio.sabor2 || pedido.meioAMeio.segundoSabor || '')}
-                    </div>
-                `;
-            } else if (pedido.pizzaMeioAMeio) {
-                pizzaMeioHTML = `
-                    <div class="pizza-meio">
-                        🍕 Pizza Meio a Meio: ${escapeHTML(pedido.pizzaMeioAMeio.sabor1 || '')} + ${escapeHTML(pedido.pizzaMeioAMeio.sabor2 || '')}
-                    </div>
-                `;
-            } else if (pedido.sabor1 && pedido.sabor2) {
-                pizzaMeioHTML = `
-                    <div class="pizza-meio">
-                        🍕 Pizza Meio a Meio: ${escapeHTML(pedido.sabor1)} + ${escapeHTML(pedido.sabor2)}
-                    </div>
-                `;
-            }
-
-            const observacao = pedido.obs || pedido.observacao || '';
-            const acrescimos = pedido.acrescimos || pedido.adicionais || '';
-
-            div.innerHTML = `
-                <div class="pedido-header">
-                    <div>
-                        <h3>🍔 Pedido #${escapeHTML(idPedido.slice(-4))}</h3>
-                        <div class="pedido-data">🕒 ${escapeHTML(horarioPedido)}</div>
-                    </div>
-                    <span class="badge-status ${statusClass}">${escapeHTML(status)}</span>
-                </div>
-                <div class="pedido-body">
-                    <p><strong>👤 Cliente:</strong> <span class="cliente-destaque">${escapeHTML(cliente)}</span></p>
-                    <p><strong>📦 Tipo:</strong> ${escapeHTML(tipoPedido)}</p>
-                    <p><strong>📍 Endereço:</strong> ${escapeHTML(endereco)}</p>
-                    ${pedido.bairro ? `<p><strong>🏘️ Bairro:</strong> ${escapeHTML(pedido.bairro)}</p>` : ''}
-                    <p><strong>💳 Pagamento:</strong> ${escapeHTML(pagamento)}
-                    ${troco ? `<br><strong>💵 Troco para:</strong> R$ ${escapeHTML(String(troco))}` : ''}</p>
-                    ${pizzaMeioHTML}
-                    ${itensHTML ? `<div class="itens-pedido"><strong>🍽️ Itens do Pedido</strong>${itensHTML}</div>` : ''}
-                    ${acrescimos ? `<p><strong>➕ Acréscimos:</strong> <span class="acrescimo-destaque">${escapeHTML(String(acrescimos))}</span></p>` : ''}
-                    ${observacao ? `<p><strong>📝 Observações:</strong> <span class="obs-destaque">${escapeHTML(observacao)}</span></p>` : ''}
-                    <p class="valor-total">💰 Total: R$ ${valorNumerico.toFixed(2).replace('.', ',')}</p>
-                </div>
-                <div class="actions">
-                    <button type="button" class="btn btn-preparo" onclick="atualizarStatus('${idPedido}', 'Em Preparo')">👨‍🍳 Em Preparo</button>
-                    <button type="button" class="btn btn-pronto" onclick="atualizarStatus('${idPedido}', 'Pronto / Em Rota')">🛵 Pronto / Em Rota</button>
-                    <button type="button" class="btn btn-concluir" onclick="finalizarPedido('${idPedido}')">✅ Concluir / Finalizar</button>
-                </div>
-            `;
-            listaPedidosDiv.appendChild(div);
-        });
-
-        totalPendentesElem.innerText = idsPedidos.length;
-    });
-
-    function getStatusClass(status) {
-        if (status === 'Em Preparo') return 'status-preparo';
-        if (status === 'Pronto / Em Rota') return 'status-pronto';
-        return 'status-pendente';
-    }
-
-    window.atualizarStatus = async function (idPedido, novoStatus) {
-        try {
-            const pedidoRef = ref(db, \`pedidos/\${idPedido}\`);
-            await update(pedidoRef, { status: novoStatus });
-            mostrarNotificacao(\`Pedido atualizado: \${novoStatus}\`);
-        } catch (erro) {
-            console.error('Erro ao atualizar pedido:', erro);
-            alert('Não foi possível atualizar o status do pedido.');
-        }
-    };
-
-    window.finalizarPedido = async function (idPedido) {
-        const confirmar = confirm('Deseja marcar este pedido como concluído e removê-lo do painel?');
-        if (!confirmar) return;
-        try {
-            const pedidoRef = ref(db, \`pedidos/\${idPedido}\`);
-            await remove(pedidoRef);
-            mostrarNotificacao('✅ Pedido concluído com sucesso!');
-        } catch (erro) {
-            console.error('Erro ao finalizar pedido:', erro);
-            alert('Não foi possível finalizar o pedido.');
-        }
-    };
-
-    function mostrarNotificacao(mensagem) {
-        notificacao.innerText = mensagem;
-        notificacao.classList.add('show');
-        setTimeout(() => {
-            notificacao.classList.remove('show');
-        }, 4000);
-    }
-
-    function escapeHTML(valor) {
-        if (valor === null || valor === undefined) return '';
-        return String(valor)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window.db = db;
+window.push = push;
+window.ref = ref;
 </script>
+
+<script>
+// ======= FUNÇÕES DA IMAGEM LIGHTBOX =======
+function abrirLightbox(src) {
+  const modal = document.getElementById('modal-lightbox');
+  const img = document.getElementById('img-ampliada');
+  img.src = src;
+  modal.style.display = 'flex';
+}
+
+function fecharLightbox() {
+  document.getElementById('modal-lightbox').style.display = 'none';
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && document.getElementById('modal-lightbox').style.display === 'flex') {
+    fecharLightbox();
+  }
+});
+// ===========================================
+
+const STORAGE_KEY = 'bolinhaCarrinho';
+let carrinho = [];
+let total = 0;
+let itemAtual = null;
+let enviandoPedido = false;
+
+const saboresPizza = {
+  "Pizza Moda da Casa": { P: 50.00, M: 67.00, G: 82.00, GG: 94.00 },
+  "Pizza Palmito": { P: 48.00, M: 64.00, G: 79.00, GG: 90.00 },
+  "Pizza Portuguesa": { P: 49.00, M: 65.00, G: 80.00, GG: 92.00 },
+  "Pizza Calabresa": { P: 49.00, M: 66.00, G: 80.00, GG: 92.00 },
+  "Pizza Bacon": { P: 49.00, M: 66.00, G: 80.00, GG: 92.00 },
+  "Pizza Frango com Catupiry": { P: 49.00, M: 66.00, G: 80.00, GG: 92.00 },
+  "Pizza Carne Desfiada com Catupiry": { P: 50.00, M: 67.00, G: 82.00, GG: 93.00 },
+  "Pizza Napolitana": { P: 45.00, M: 62.00, G: 75.00, GG: 86.00 },
+  "Pizza Vegetariana": { P: 47.00, M: 63.00, G: 77.00, GG: 87.00 }
+};
+
+function formatarMoeda(valor) {
+  return valor.toFixed(2).replace('.', ',');
+}
+
+function carregarCarrinho() {
+  const dados = localStorage.getItem(STORAGE_KEY);
+  if (!dados) return;
+  try {
+    const salvo = JSON.parse(dados);
+    if (Array.isArray(salvo.carrinho)) {
+      carrinho = salvo.carrinho.map(item => ({
+        nome: item.nome,
+        preco: Number(item.preco) || 0,
+        obs: item.obs || '',
+        quantidade: Number(item.quantidade) || 1
+      }));
+      total = calcularTotal();
+    }
+  } catch (erro) {
+    console.warn('Falha ao carregar carrinho:', erro);
+  }
+}
+
+function salvarCarrinho() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ carrinho, total: calcularTotal() }));
+}
+
+function calcularTotal() {
+  return carrinho.reduce((acum, item) => acum + (Number(item.preco) * Number(item.quantidade)), 0);
+}
+
+function calcularQuantidadeItens() {
+  return carrinho.reduce((acum, item) => acum + Number(item.quantidade), 0);
+}
+
+function checarHorarioFuncionamento() {
+  const agora = new Date();
+  const diaSemana = agora.getDay();
+  const hora = agora.getHours();
+  const minutos = agora.getMinutes();
+  const horaDecimal = hora + minutos / 60;
+  const statusDiv = document.getElementById('status-loja');
+  const btnFinalizar = document.getElementById('btn-finalizar');
+
+  const diaUtil = diaSemana !== 2;
+  const horarioUtil = horaDecimal >= 18.0 && horaDecimal <= 22.5;
+
+  if (diaUtil && horarioUtil) {
+    statusDiv.className = 'status-loja aberto';
+    statusDiv.innerHTML = '🟢 Loja Aberta! Faça seu pedido.';
+    btnFinalizar.disabled = false;
+  } else {
+    statusDiv.className = 'status-loja fechado';
+    statusDiv.innerHTML = '🔴 Estamos Fechados no Momento.<br><small>Funcionamento: Quarta a Segunda, das 18:00 às 22:30</small>';
+    btnFinalizar.disabled = true;
+    btnFinalizar.innerText = 'Loja Fechada no Momento';
+  }
+}
+
+function abrirModal(nome, tamanho, preco, tipo) {
+  const nomeCompleto = tamanho ? `${nome} (Tam: ${tamanho})` : nome;
+  itemAtual = { nome: nomeCompleto, nomeBase: nome, tamanho: tamanho, preco: Number(preco), tipo };
+
+  const modal = document.getElementById('modal-obs');
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('input-obs').value = '';
+  document.getElementById('modal-title').innerText = `Adicionando: ${nomeCompleto}`;
+
+  document.querySelectorAll('input[name="acrescimo"]').forEach(chk => { chk.checked = false; });
+  document.getElementById('checkbox-meio-a-meio').checked = false;
+  document.getElementById('sabores-meio-box').style.display = 'none';
+
+  const blocoMeio = document.getElementById('bloco-meio-a-meio');
+  const blocoBorda = document.getElementById('bloco-borda');
+  const blocoAcrescimos = document.getElementById('bloco-acrescimos');
+
+  if (tipo === 'pizza') {
+    blocoMeio.style.display = 'block';
+    blocoBorda.style.display = 'block';
+    blocoAcrescimos.style.display = 'none';
+    configurarSaboresMeio(nome, tamanho);
+
+    let precoBorda = 0;
+    if (tamanho === 'P') precoBorda = 10.00;
+    else if (tamanho === 'M') precoBorda = 12.00;
+    else if (tamanho === 'G') precoBorda = 15.00;
+    else if (tamanho === 'GG') precoBorda = 18.00;
+
+    const selectBorda = document.getElementById('select-borda');
+    selectBorda.innerHTML = `
+      <option value="0">Massa Tradicional (Sem Borda Recheada)</option>
+      <option value="${precoBorda}">Borda de Cheddar (+ R$ ${formatarMoeda(precoBorda)})</option>
+      <option value="${precoBorda}">Borda de Catupiry (+ R$ ${formatarMoeda(precoBorda)})</option>
+    `;
+    selectBorda.value = '0';
+  } else if (tipo === 'lanche') {
+    blocoMeio.style.display = 'none';
+    blocoBorda.style.display = 'none';
+    blocoAcrescimos.style.display = 'block';
+  } else {
+    blocoMeio.style.display = 'none';
+    blocoBorda.style.display = 'none';
+    blocoAcrescimos.style.display = 'none';
+  }
+  document.getElementById('input-obs').focus();
+}
+
+function configurarSaboresMeio(saborOriginal, tamanho) {
+  const select1 = document.getElementById('sabor-meio-1');
+  const select2 = document.getElementById('sabor-meio-2');
+  select1.innerHTML = '';
+  select2.innerHTML = '';
+
+  Object.keys(saboresPizza).forEach(nomeSabor => {
+    const option1 = document.createElement('option');
+    option1.value = nomeSabor;
+    option1.textContent = nomeSabor.replace('Pizza ', '');
+    const option2 = option1.cloneNode(true);
+    select1.appendChild(option1);
+    select2.appendChild(option2);
+  });
+
+  if (saboresPizza[saborOriginal]) {
+    select1.value = saborOriginal;
+  }
+
+  const primeiroDiferente = Object.keys(saboresPizza).find(nome => nome !== saborOriginal);
+  if (primeiroDiferente) {
+    select2.value = primeiroDiferente;
+  }
+  atualizarPrecoMeioAMeio();
+}
+
+function alternarMeioAMeio() {
+  const checkbox = document.getElementById('checkbox-meio-a-meio');
+  const box = document.getElementById('sabores-meio-box');
+  if (checkbox.checked) {
+    box.style.display = 'block';
+    atualizarPrecoMeioAMeio();
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+function obterDadosMeioAMeio() {
+  const sabor1 = document.getElementById('sabor-meio-1').value;
+  const sabor2 = document.getElementById('sabor-meio-2').value;
+  const tamanho = itemAtual.tamanho;
+  const preco1 = saboresPizza[sabor1][tamanho];
+  const preco2 = saboresPizza[sabor2][tamanho];
+  return { sabor1, sabor2, preco1, preco2, precoFinal: Math.max(preco1, preco2) };
+}
+
+function atualizarPrecoMeioAMeio() {
+  if (!itemAtual || itemAtual.tipo !== 'pizza') return;
+  const checkbox = document.getElementById('checkbox-meio-a-meio');
+  if (!checkbox.checked) return;
+  const dados = obterDadosMeioAMeio();
+  document.getElementById('preco-meio-a-meio').innerText = `Preço da pizza: R$ ${formatarMoeda(dados.precoFinal)}`;
+}
+
+function fecharModal() {
+  const modal = document.getElementById('modal-obs');
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  itemAtual = null;
+}
+
+function mostrarToast(mensagem = 'Item adicionado com sucesso! ✅', erro = false) {
+  const toast = document.getElementById('toast');
+  toast.innerText = mensagem;
+  toast.className = erro ? 'show erro' : 'show';
+  setTimeout(() => { toast.className = ''; }, 3000);
+}
+
+function adicionarAoCarrinho() {
+  if (!itemAtual) { fecharModal(); return; }
+
+  let obs = document.getElementById('input-obs').value.trim();
+  let precoFinal = itemAtual.preco;
+  let nomeFinal = itemAtual.nome;
+  let extrasTexto = [];
+
+  if (itemAtual.tipo === 'pizza') {
+    const checkboxMeio = document.getElementById('checkbox-meio-a-meio');
+    if (checkboxMeio.checked) {
+      const dados = obterDadosMeioAMeio();
+      if (dados.sabor1 === dados.sabor2) {
+        alert('Escolha dois sabores diferentes para montar uma pizza meio a meio.');
+        return;
+      }
+      precoFinal = dados.precoFinal;
+      nomeFinal = `Pizza ${itemAtual.tamanho} Meio a Meio`;
+      extrasTexto.push(`1/2 ${dados.sabor1.replace('Pizza ', '')}`);
+      extrasTexto.push(`1/2 ${dados.sabor2.replace('Pizza ', '')}`);
+    }
+
+    const selectBorda = document.getElementById('select-borda');
+    const valorBorda = parseFloat(selectBorda.value) || 0;
+    const nomeBorda = selectBorda.options[selectBorda.selectedIndex].text;
+    if (valorBorda > 0) {
+      precoFinal += valorBorda;
+      const textoBorda = nomeBorda.split(' (+')[0];
+      extrasTexto.push(textoBorda);
+    }
+  } else if (itemAtual.tipo === 'lanche') {
+    const checkboxes = document.querySelectorAll('input[name="acrescimo"]:checked');
+    checkboxes.forEach(chk => {
+      const valorExtra = parseFloat(chk.dataset.preco);
+      precoFinal += valorExtra;
+      extrasTexto.push(`+ ${chk.value} (R$ ${formatarMoeda(valorExtra)})`);
+    });
+  }
+
+  let obsCompleta = '';
+  if (extrasTexto.length > 0) obsCompleta += extrasTexto.join(', ');
+  if (obs) obsCompleta += (obsCompleta ? ' | ' : '') + obs;
+
+  const itemExistente = carrinho.find(item => item.nome === nomeFinal && item.obs === obsCompleta && Number(item.preco) === Number(precoFinal));
+
+  if (itemExistente) {
+    itemExistente.quantidade += 1;
+  } else {
+    carrinho.push({ nome: nomeFinal, preco: Number(precoFinal), obs: obsCompleta, quantidade: 1 });
+  }
+
+  total = calcularTotal();
+  salvarCarrinho();
+  fecharModal();
+  atualizarCarrinho();
+  mostrarToast();
+}
+
+function alterarQuantidade(index, delta) {
+  const item = carrinho[index];
+  if (!item) return;
+  item.quantidade += delta;
+  if (item.quantidade < 1) carrinho.splice(index, 1);
+  total = calcularTotal();
+  salvarCarrinho();
+  atualizarCarrinho();
+}
+
+function removerItem(index) {
+  if (!carrinho[index]) return;
+  carrinho.splice(index, 1);
+  total = calcularTotal();
+  salvarCarrinho();
+  atualizarCarrinho();
+}
+
+function limparCarrinho() {
+  if (!carrinho.length) return;
+  if (!confirm('Deseja realmente limpar o carrinho?')) return;
+  carrinho = [];
+  total = 0;
+  salvarCarrinho();
+  atualizarCarrinho();
+}
+
+function atualizarTipoPedido() {
+  const tipoPedido = document.getElementById('tipo-pedido').value;
+  const camposEndereco = document.getElementById('campos-endereco');
+  const avisoRetirada = document.getElementById('aviso-retirada');
+  const endereco = document.getElementById('cliente-endereco');
+  const bairro = document.getElementById('cliente-bairro');
+  const retirada = tipoPedido === 'Buscar na Loja (Retirada)';
+
+  if (retirada) {
+    camposEndereco.classList.add('oculto');
+    avisoRetirada.classList.add('visivel');
+    endereco.required = false;
+    bairro.required = false;
+    endereco.value = '';
+    bairro.value = '';
+  } else {
+    camposEndereco.classList.remove('oculto');
+    avisoRetirada.classList.remove('visivel');
+    endereco.required = true;
+    bairro.required = true;
+  }
+}
+
+function verificarPagamento() {
+  const pagamento = document.getElementById('forma-pagamento').value;
+  const blocoTroco = document.getElementById('bloco-troco');
+  const trocoInput = document.getElementById('cliente-troco');
+
+  if (pagamento === 'Dinheiro') {
+    blocoTroco.style.display = 'block';
+  } else {
+    blocoTroco.style.display = 'none';
+    trocoInput.value = '';
+    trocoInput.setCustomValidity('');
+  }
+}
+
+function validarTroco() {
+  const pagamento = document.getElementById('forma-pagamento').value;
+  const trocoInput = document.getElementById('cliente-troco');
+  const troco = trocoInput.value.trim();
+
+  if (pagamento === 'Dinheiro' && troco) {
+    const valor = parseFloat(troco.replace(',', '.'));
+    if (Number.isNaN(valor) || valor <= 0) {
+      trocoInput.setCustomValidity('Informe um valor de troco válido.');
+      trocoInput.reportValidity();
+      return false;
+    }
+    if (valor < calcularTotal()) {
+      trocoInput.setCustomValidity(`O valor para troco deve ser maior ou igual a R$ ${formatarMoeda(calcularTotal())}.`);
+      trocoInput.reportValidity();
+      return false;
+    }
+  }
+  trocoInput.setCustomValidity('');
+  return true;
+}
+
+function filtrarCategoria(categoria) {
+  const secoes = document.querySelectorAll('section[data-category]');
+  secoes.forEach(secao => {
+    if (categoria === 'todos' || secao.dataset.category === categoria) {
+      secao.classList.remove('categoria-oculta');
+    } else {
+      secao.classList.add('categoria-oculta');
+    }
+  });
+  marcarCategoriaAtiva(categoria);
+  if (categoria !== 'todos') {
+    const alvo = document.getElementById(`${categoria}-sec`);
+    if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function marcarCategoriaAtiva(categoria) {
+  const botoes = document.querySelectorAll('.category-nav button');
+  botoes.forEach(botao => {
+    botao.classList.toggle('active', botao.getAttribute('onclick')?.includes(`filtrarCategoria('${categoria}')`));
+  });
+}
+
+function atualizarCarrinho() {
+  const divItens = document.getElementById('itens-carrinho');
+  const divTotal = document.getElementById('total-carrinho');
+  const divResumo = document.getElementById('cart-summary');
+  const btnLimpar = document.getElementById('btn-limpar');
+
+  total = calcularTotal();
+
+  if (carrinho.length === 0) {
+    divItens.innerHTML = 'Nenhum item adicionado ainda.';
+    divResumo.innerText = 'Quantidade de itens: 0';
+    divTotal.innerText = 'Total: R$ 0,00';
+    btnLimpar.disabled = true;
+    return;
+  }
+
+  divItens.innerHTML = '';
+  carrinho.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    let conteudoItem = `
+      <div class="cart-item-info">
+        <b>${item.nome}</b><br>
+        R$ ${formatarMoeda(item.preco)} cada<br>
+        <small>Subtotal: R$ ${formatarMoeda(item.preco * item.quantidade)}</small>
+    `;
+    if (item.obs) conteudoItem += `<span class="cart-obs">Obs: ${item.obs}</span>`;
+
+    conteudoItem += `
+      <div class="cart-controls">
+        <button type="button" class="btn-size" onclick="alterarQuantidade(${index}, -1)">-</button>
+        <span>${item.quantidade}</span>
+        <button type="button" class="btn-size" onclick="alterarQuantidade(${index}, 1)">+</button>
+      </div></div>
+    `;
+    const botaoRemover = `<button type="button" class="btn-remover" onclick="removerItem(${index})">🗑️ Remover</button>`;
+    div.innerHTML = conteudoItem + botaoRemover;
+    divItens.appendChild(div);
+  });
+
+  divResumo.innerText = `Quantidade de itens: ${calcularQuantidadeItens()}`;
+  divTotal.innerText = `Total: R$ ${formatarMoeda(total)}`;
+  btnLimpar.disabled = false;
+}
+
+async function finalizarPedido() {
+  if (enviandoPedido) return;
+  if (carrinho.length === 0) {
+    alert('Seu carrinho está vazio! Adicione itens antes de finalizar.');
+    return;
+  }
+  if (!validarTroco()) return;
+
+  const nome = document.getElementById('cliente-nome').value.trim();
+  const tipoPedido = document.getElementById('tipo-pedido').value;
+  const retirada = tipoPedido === 'Buscar na Loja (Retirada)';
+  const endereco = document.getElementById('cliente-endereco').value.trim();
+  const bairro = document.getElementById('cliente-bairro').value.trim();
+
+  if (!nome) {
+    alert('Por favor, informe seu nome completo.');
+    document.getElementById('cliente-nome').focus();
+    return;
+  }
+  if (!retirada && (!endereco || !bairro)) {
+    alert('Para entrega, informe seu endereço e bairro.');
+    document.getElementById('carrinho-sec').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  const formaPagamento = document.getElementById('forma-pagamento').value;
+  const troco = document.getElementById('cliente-troco').value.trim();
+
+  if (!window.db || !window.push || !window.ref) {
+    alert('Não foi possível conectar ao sistema de pedidos. Tente novamente em alguns instantes.');
+    return;
+  }
+
+  enviandoPedido = true;
+  const btnFinalizar = document.getElementById('btn-finalizar');
+  btnFinalizar.disabled = true;
+  btnFinalizar.classList.add('enviando');
+  btnFinalizar.innerText = 'Enviando pedido...';
+
+  const enderecoFinal = retirada ? 'Retirada no Balcão' : `${endereco} - ${bairro}`;
+  const itensTexto = carrinho.map(item => `${item.quantidade}x ${item.nome}` + (item.obs ? ` (${item.obs})` : '')).join(', ');
+  const itemPrincipal = carrinho.map(item => `${item.quantidade}x ${item.nome}`).join(', ');
+  const observacoes = carrinho.filter(item => item.obs).map(item => `${item.nome}: ${item.obs}`).join(' | ');
+
+  const novoPedidoObj = {
+    cliente: nome,
+    endereco: enderecoFinal,
+    tipo: tipoPedido,
+    formaPagamento: formaPagamento,
+    troco: troco || 'Não necessário',
+    item: itemPrincipal,
+    itens: itensTexto,
+    obs: observacoes,
+    valor: Number(calcularTotal().toFixed(2)),
+    data: new Date().toISOString(),
+    status: 'Pendente'
+  };
+
+  try {
+    await window.push(window.ref(window.db, 'pedidos'), novoPedidoObj);
+
+    carrinho = [];
+    total = 0;
+    salvarCarrinho();
+    atualizarCarrinho();
+
+    document.getElementById('cliente-nome').value = '';
+    document.getElementById('cliente-endereco').value = '';
+    document.getElementById('cliente-bairro').value = '';
+    document.getElementById('cliente-troco').value = '';
+    document.getElementById('forma-pagamento').value = 'Pix';
+    verificarPagamento();
+    document.getElementById('tipo-pedido').value = 'Receber em Casa (Entrega)';
+    atualizarTipoPedido();
+
+    const sucesso = document.getElementById('pedido-sucesso');
+    sucesso.classList.add('visivel');
+    sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    mostrarToast('Pedido enviado com sucesso! ✅');
+    setTimeout(() => { sucesso.classList.remove('visivel'); }, 8000);
+
+  } catch (erro) {
+    console.error('Erro ao enviar pedido:', erro);
+    alert('Não foi possível enviar seu pedido. Verifique sua conexão e tente novamente.');
+  } finally {
+    enviandoPedido = false;
+    btnFinalizar.classList.remove('enviando');
+    btnFinalizar.innerText = 'Finalizar Pedido';
+    checarHorarioFuncionamento();
+  }
+}
+
+function initModalEvents() {
+  const modal = document.getElementById('modal-obs');
+  modal.addEventListener('click', event => {
+    if (event.target === modal) fecharModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.style.display === 'flex') fecharModal();
+  });
+}
+
+window.onload = () => {
+  carregarCarrinho();
+  checarHorarioFuncionamento();
+  atualizarCarrinho();
+  initModalEvents();
+  filtrarCategoria('todos');
+  atualizarTipoPedido();
+  verificarPagamento();
+};
+
+setInterval(checarHorarioFuncionamento, 60000);
+</script>
+
 </body>
 </html>

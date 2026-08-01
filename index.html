@@ -1305,14 +1305,13 @@ function checarHorarioFuncionamento() {
 
   const diaUtil = diaSemana !== 2;
   const horarioUtil = horaDecimal >= 18.0 && horaDecimal <= 22:5;
-
   if (diaUtil && horarioUtil) {
     statusDiv.className = 'status-loja aberto';
     statusDiv.innerHTML = '🟢 Loja Aberta! Faça seu pedido.';
     btnFinalizar.disabled = false;
   } else {
     statusDiv.className = 'status-loja fechado';
-    statusDiv.innerHTML = '🔴 Estamos Fechados no Momento.<br><small>Funcionamento: Quarta a Segunda, das 18:00 às 22:30</small>';
+    statusDiv.innerHTML = '🔴 Estamos Fechados no Momento.<br><small>Funcionamento: Quarta a Segunda, das 18:00 às 22:30 </small>';
     btnFinalizar.disabled = true;
     btnFinalizar.innerText = 'Loja Fechada no Momento';
   }

@@ -197,7 +197,6 @@
         border-bottom: none;
     }
 
-    /* ESTILOS NOVOS PARA AS FOTOS DOS LANCHES */
     .item-conteudo {
         display: flex;
         align-items: center;
@@ -238,7 +237,6 @@
         margin: 0;
         line-height: 1.5;
     }
-    /* FIM DOS ESTILOS DAS FOTOS */
 
     .sizes {
         display: flex;
@@ -290,7 +288,6 @@
         color: #121212;
     }
 
-    /* MODAL DE AMPLIAÇÃO DA IMAGEM (LIGHTBOX) */
     #modal-lightbox {
         display: none;
         position: fixed;
@@ -1208,14 +1205,16 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+    // Configuração real do Firebase
     const firebaseConfig = {
-        apiKey: "SUA_API_KEY",
+        apiKey: "AIzaSyAYEgCz2kMGnMqVZDPWiMgxgLWjNQMxeqA",
         authDomain: "bolinha-lanches-ae5ad.firebaseapp.com",
         databaseURL: "https://bolinha-lanches-ae5ad-default-rtdb.firebaseio.com",
         projectId: "bolinha-lanches-ae5ad",
-        storageBucket: "bolinha-lanches-ae5ad.appspot.com",
-        messagingSenderId: "SEU_SENDER_ID",
-        appId: "SEU_APP_ID"
+        storageBucket: "bolinha-lanches-ae5ad.firebasestorage.app",
+        messagingSenderId: "971256696839",
+        appId: "1:971256696839:web:a1d0f4888cf75c28b09aa2",
+        measurementId: "G-1674758XZN"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -1381,417 +1380,18 @@
         Object.keys(saboresPizza).forEach(nomeSabor => {
             const option1 = document.createElement('option');
             option1.value = nomeSabor;
-            option1.textContent = nomeSabor.replace('Pizza ', '');
-            const option2 = option1.cloneNode(true);
+            option1.textContent = nomeSabor;
             select1.appendChild(option1);
+
+            const option2 = document.createElement('option');
+            option2.value = nomeSabor;
+            option2.textContent = nomeSabor;
             select2.appendChild(option2);
         });
-
-        if (saboresPizza[saborOriginal]) {
-            select1.value = saborOriginal;
-        }
-
-        const primeiroDiferente = Object.keys(saboresPizza).find(nome => nome !== saborOriginal);
-        if (primeiroDiferente) {
-            select2.value = primeiroDiferente;
-        }
-        atualizarPrecoMeioAMeio();
-    }
-
-    function alternarMeioAMeio() {
-        const checkbox = document.getElementById('checkbox-meio-a-meio');
-        const box = document.getElementById('sabores-meio-box');
-        if (checkbox.checked) {
-            box.style.display = 'block';
-            atualizarPrecoMeioAMeio();
-        } else {
-            box.style.display = 'none';
-        }
-    }
-
-    function obterDadosMeioAMeio() {
-        const sabor1 = document.getElementById('sabor-meio-1').value;
-        const sabor2 = document.getElementById('sabor-meio-2').value;
-        const tamanho = itemAtual.tamanho;
-        const preco1 = saboresPizza[sabor1][tamanho];
-        const preco2 = saboresPizza[sabor2][tamanho];
-        return { sabor1, sabor2, preco1, preco2, precoFinal: Math.max(preco1, preco2) };
-    }
-
-    function atualizarPrecoMeioAMeio() {
-        if (!itemAtual || itemAtual.tipo !== 'pizza') return;
-        const checkbox = document.getElementById('checkbox-meio-a-meio');
-        if (!checkbox.checked) return;
-        const dados = obterDadosMeioAMeio();
-        document.getElementById('preco-meio-a-meio').innerText = `Preço da pizza: R$ ${formatarMoeda(dados.precoFinal)}`;
-    }
-
-    function fecharModal() {
-        const modal = document.getElementById('modal-obs');
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        itemAtual = null;
-    }
-
-    function mostrarToast(mensagem = 'Item adicionado com sucesso! ✅', erro = false) {
-        const toast = document.getElementById('toast');
-        toast.innerText = mensagem;
-        toast.className = erro ? 'show erro' : 'show';
-        setTimeout(() => { toast.className = ''; }, 3000);
-    }
-
-    function adicionarAoCarrinho() {
-        if (!itemAtual) { fecharModal(); return; }
-
-        let obs = document.getElementById('input-obs').value.trim();
-        let precoFinal = itemAtual.preco;
-        let nomeFinal = itemAtual.nome;
-        let extrasTexto = [];
-
-        if (itemAtual.tipo === 'pizza') {
-            const checkboxMeio = document.getElementById('checkbox-meio-a-meio');
-            if (checkboxMeio.checked) {
-                const dados = obterDadosMeioAMeio();
-                if (dados.sabor1 === dados.sabor2) {
-                    alert('Escolha dois sabores diferentes para montar uma pizza meio a meio.');
-                    return;
-                }
-                precoFinal = dados.precoFinal;
-                nomeFinal = `Pizza ${itemAtual.tamanho} Meio a Meio`;
-                extrasTexto.push(`1/2 ${dados.sabor1.replace('Pizza ', '')}`);
-                extrasTexto.push(`1/2 ${dados.sabor2.replace('Pizza ', '')}`);
-            }
-
-            const selectBorda = document.getElementById('select-borda');
-            const valorBorda = parseFloat(selectBorda.value) || 0;
-            const nomeBorda = selectBorda.options[selectBorda.selectedIndex].text;
-            if (valorBorda > 0) {
-                precoFinal += valorBorda;
-                const textoBorda = nomeBorda.split(' (+')[0];
-                extrasTexto.push(textoBorda);
-            }
-        } else if (itemAtual.tipo === 'lanche') {
-            const checkboxes = document.querySelectorAll('input[name="acrescimo"]:checked');
-            checkboxes.forEach(chk => {
-                const valorExtra = parseFloat(chk.dataset.preco);
-                precoFinal += valorExtra;
-                extrasTexto.push(`+ ${chk.value} (R$ ${formatarMoeda(valorExtra)})`);
-            });
-        }
-
-        let obsCompleta = '';
-        if (extrasTexto.length > 0) obsCompleta += extrasTexto.join(', ');
-        if (obs) obsCompleta += (obsCompleta ? ' | ' : '') + obs;
-
-        const itemExistente = carrinho.find(item => item.nome === nomeFinal && item.obs === obsCompleta && Number(item.preco) === Number(precoFinal));
         
-        if (itemExistente) {
-            itemExistente.quantidade += 1;
-        } else {
-            carrinho.push({ nome: nomeFinal, preco: Number(precoFinal), obs: obsCompleta, quantidade: 1 });
-        }
-
-        total = calcularTotal();
-        salvarCarrinho();
-        fecharModal();
-        atualizarCarrinho();
-        mostrarToast();
+        select1.value = saborOriginal;
+        select2.value = saborOriginal;
     }
-
-    function alterarQuantidade(index, delta) {
-        const item = carrinho[index];
-        if (!item) return;
-        item.quantidade += delta;
-        if (item.quantidade < 1) carrinho.splice(index, 1);
-        total = calcularTotal();
-        salvarCarrinho();
-        atualizarCarrinho();
-    }
-
-    function removerItem(index) {
-        if (!carrinho[index]) return;
-        carrinho.splice(index, 1);
-        total = calcularTotal();
-        salvarCarrinho();
-        atualizarCarrinho();
-    }
-
-    function limparCarrinho() {
-        if (!carrinho.length) return;
-        if (!confirm('Deseja realmente limpar o carrinho?')) return;
-        carrinho = [];
-        total = 0;
-        salvarCarrinho();
-        atualizarCarrinho();
-    }
-
-    function atualizarTipoPedido() {
-        const tipoPedido = document.getElementById('tipo-pedido').value;
-        const camposEndereco = document.getElementById('campos-endereco');
-        const avisoRetirada = document.getElementById('aviso-retirada');
-        const endereco = document.getElementById('cliente-endereco');
-        const bairro = document.getElementById('cliente-bairro');
-        const retirada = tipoPedido === 'Buscar na Loja (Retirada)';
-
-        if (retirada) {
-            camposEndereco.classList.add('oculto');
-            avisoRetirada.classList.add('visivel');
-            endereco.required = false;
-            bairro.required = false;
-            endereco.value = '';
-            bairro.value = '';
-        } else {
-            camposEndereco.classList.remove('oculto');
-            avisoRetirada.classList.remove('visivel');
-            endereco.required = true;
-            bairro.required = true;
-        }
-    }
-
-    function verificarPagamento() {
-        const pagamento = document.getElementById('forma-pagamento').value;
-        const blocoTroco = document.getElementById('bloco-troco');
-        const trocoInput = document.getElementById('cliente-troco');
-
-        if (pagamento === 'Dinheiro') {
-            blocoTroco.style.display = 'block';
-        } else {
-            blocoTroco.style.display = 'none';
-            trocoInput.value = '';
-            trocoInput.setCustomValidity('');
-        }
-    }
-
-    function validarTroco() {
-        const pagamento = document.getElementById('forma-pagamento').value;
-        const trocoInput = document.getElementById('cliente-troco');
-        const troco = trocoInput.value.trim();
-
-        if (pagamento === 'Dinheiro' && troco) {
-            const valor = parseFloat(troco.replace(',', '.'));
-            if (Number.isNaN(valor) || valor <= 0) {
-                trocoInput.setCustomValidity('Informe um valor de troco válido.');
-                trocoInput.reportValidity();
-                return false;
-            }
-            if (valor < calcularTotal()) {
-                trocoInput.setCustomValidity(`O valor para troco deve ser maior ou igual a R$ ${formatarMoeda(calcularTotal())}.`);
-                trocoInput.reportValidity();
-                return false;
-            }
-        }
-        trocoInput.setCustomValidity('');
-        return true;
-    }
-
-    function filtrarCategoria(categoria) {
-        const secoes = document.querySelectorAll('section[data-category]');
-        secoes.forEach(secao => {
-            if (categoria === 'todos' || secao.dataset.category === categoria) {
-                secao.classList.remove('categoria-oculta');
-            } else {
-                secao.classList.add('categoria-oculta');
-            }
-        });
-        marcarCategoriaAtiva(categoria);
-        if (categoria !== 'todos') {
-            const alvo = document.getElementById(`${categoria}-sec`);
-            if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-
-    function marcarCategoriaAtiva(categoria) {
-        const botoes = document.querySelectorAll('.category-nav button');
-        botoes.forEach(botao => {
-            botao.classList.toggle('active', botao.getAttribute('onclick')?.includes(`filtrarCategoria('${categoria}')`));
-        });
-    }
-
-    function atualizarCarrinho() {
-        const divItens = document.getElementById('itens-carrinho');
-        const divTotal = document.getElementById('total-carrinho');
-        const divResumo = document.getElementById('cart-summary');
-        const btnLimpar = document.getElementById('btn-limpar');
-        
-        total = calcularTotal();
-
-        if (carrinho.length === 0) {
-            divItens.innerHTML = 'Nenhum item adicionado ainda.';
-            divResumo.innerText = 'Quantidade de itens: 0';
-            divTotal.innerText = 'Total: R$ 0,00';
-            btnLimpar.disabled = true;
-            return;
-        }
-
-        divItens.innerHTML = '';
-        carrinho.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'cart-item';
-            let conteudoItem = `
-                <div class="cart-item-info">
-                    <b>${item.nome}</b><br>
-                    R$ ${formatarMoeda(item.preco)} cada<br>
-                    <small>Subtotal: R$ ${formatarMoeda(item.preco * item.quantidade)}</small>
-            `;
-            if (item.obs) conteudoItem += `<span class="cart-obs">Obs: ${item.obs}</span>`;
-            
-            conteudoItem += `
-                <div class="cart-controls">
-                    <button type="button" class="btn-size" onclick="alterarQuantidade(${index}, -1)">-</button>
-                    <span>${item.quantidade}</span>
-                    <button type="button" class="btn-size" onclick="alterarQuantidade(${index}, 1)">+</button>
-                </div></div>
-            `;
-            const botaoRemover = `<button type="button" class="btn-remover" onclick="removerItem(${index})">🗑️ Remover</button>`;
-            div.innerHTML = conteudoItem + botaoRemover;
-            divItens.appendChild(div);
-        });
-
-        divResumo.innerText = `Quantidade de itens: ${calcularQuantidadeItens()}`;
-        divTotal.innerText = `Total: R$ ${formatarMoeda(total)}`;
-        btnLimpar.disabled = false;
-    }
-
-    async function finalizarPedido() {
-        if (enviandoPedido) return;
-        if (carrinho.length === 0) {
-            alert('Seu carrinho está vazio! Adicione itens antes de finalizar.');
-            return;
-        }
-        if (!validarTroco()) return;
-
-        const nome = document.getElementById('cliente-nome').value.trim();
-        const tipoPedido = document.getElementById('tipo-pedido').value;
-        const retirada = tipoPedido === 'Buscar na Loja (Retirada)';
-        const endereco = document.getElementById('cliente-endereco').value.trim();
-        const bairro = document.getElementById('cliente-bairro').value.trim();
-
-        if (!nome) {
-            alert('Por favor, informe seu nome completo.');
-            document.getElementById('cliente-nome').focus();
-            return;
-        }
-        if (!retirada && (!endereco || !bairro)) {
-            alert('Para entrega, informe seu endereço e bairro.');
-            document.getElementById('carrinho-sec').scrollIntoView({ behavior: 'smooth' });
-            return;
-        }
-
-        const formaPagamento = document.getElementById('forma-pagamento').value;
-        const troco = document.getElementById('cliente-troco').value.trim();
-
-        if (!window.db || !window.push || !window.ref) {
-            alert('Não foi possível conectar ao sistema de pedidos. Tente novamente em alguns instantes.');
-            return;
-        }
-
-        enviandoPedido = true;
-        const btnFinalizar = document.getElementById('btn-finalizar');
-        btnFinalizar.disabled = true;
-        btnFinalizar.classList.add('enviando');
-        btnFinalizar.innerText = 'Enviando pedido...';
-
-        const enderecoFinal = retirada ? 'Retirada no Balcão' : `${endereco} - ${bairro}`;
-        const itensTexto = carrinho.map(item => `${item.quantidade}x ${item.nome}` + (item.obs ? ` (${item.obs})` : '')).join(', ');
-        const itemPrincipal = carrinho.map(item => `${item.quantidade}x ${item.nome}`).join(', ');
-        const observacoes = carrinho.filter(item => item.obs).map(item => `${item.nome}: ${item.obs}`).join(' | ');
-
-        const novoPedidoObj = {
-            cliente: nome,
-            endereco: enderecoFinal,
-            tipo: tipoPedido,
-            formaPagamento: formaPagamento,
-            troco: troco || 'Não necessário',
-            item: itemPrincipal,
-            itens: itensTexto,
-            obs: observacoes,
-            valor: Number(calcularTotal().toFixed(2)),
-            data: new Date().toISOString(),
-            status: 'Pendente'
-        };
-
-        try {
-            await window.push(window.ref(window.db, 'pedidos'), novoPedidoObj);
-            
-            carrinho = [];
-            total = 0;
-            salvarCarrinho();
-            atualizarCarrinho();
-
-            document.getElementById('cliente-nome').value = '';
-            document.getElementById('cliente-endereco').value = '';
-            document.getElementById('cliente-bairro').value = '';
-            document.getElementById('cliente-troco').value = '';
-            document.getElementById('forma-pagamento').value = 'Pix';
-            verificarPagamento();
-            document.getElementById('tipo-pedido').value = 'Receber em Casa (Entrega)';
-            atualizarTipoPedido();
-
-            const sucesso = document.getElementById('pedido-sucesso');
-            sucesso.classList.add('visivel');
-            sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            mostrarToast('Pedido enviado com sucesso! ✅');
-            setTimeout(() => { sucesso.classList.remove('visivel'); }, 8000);
-
-        } catch (erro) {
-            console.error('Erro ao enviar pedido:', erro);
-            alert('Não foi possível enviar seu pedido. Verifique sua conexão e tente novamente.');
-        } finally {
-            enviandoPedido = false;
-            btnFinalizar.classList.remove('enviando');
-            btnFinalizar.innerText = 'Finalizar Pedido';
-            checarHorarioFuncionamento();
-        }
-    }
-
-    function initModalEvents() {
-        const modal = document.getElementById('modal-obs');
-        modal.addEventListener('click', event => {
-            if (event.target === modal) fecharModal();
-        });
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && modal.style.display === 'flex') fecharModal();
-        });
-    }
-
-    window.onload = () => {
-        carregarCarrinho();
-        checarHorarioFuncionamento();
-        atualizarCarrinho();
-        initModalEvents();
-        filtrarCategoria('todos');
-        atualizarTipoPedido();
-        verificarPagamento();
-    };
-
-    setInterval(checarHorarioFuncionamento, 60000);
-
-</script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAYEgCz2kMGnMqVZDPWiMgxgLWjNQMxeqA",
-    authDomain: "bolinha-lanches-ae5ad.firebaseapp.com",
-    databaseURL: "https://bolinha-lanches-ae5ad-default-rtdb.firebaseio.com",
-    projectId: "bolinha-lanches-ae5ad",
-    storageBucket: "bolinha-lanches-ae5ad.firebasestorage.app",
-    messagingSenderId: "971256696839",
-    appId: "1:971256696839:web:a1d0f4888cf75c28b09aa2",
-    measurementId: "G-1674758XZN"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 </script>
 </body>
 </html>

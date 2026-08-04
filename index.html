@@ -1190,36 +1190,46 @@ h2 {
 </div>
 
 <div id="toast">Item adicionado com sucesso! ✅</div>
-
-<!-- ========================================================= -->
-<!-- FIREBASE E SCRIPTS -->
-<!-- ========================================================= -->
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAYEgCz2kMGnMqVZDPWiMgxgLWjNQMxeqA",
-  authDomain: "bolinha-lanches-ae5ad.firebaseapp.com",
-  databaseURL: "https://bolinha-lanches-ae5ad-default-rtdb.firebaseio.com",
-  projectId: "bolinha-lanches-ae5ad",
-  storageBucket: "bolinha-lanches-ae5ad.firebasestorage.app",
-  messagingSenderId: "971256696839",
-  appId: "1:971256696839:web:a1d0f4888cf75c28b09aa2",
-  measurementId: "G-1674758XZN"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-window.db = db;
-window.push = push;
-window.ref = ref;
-</script>
-
 <script>
-// ======= FUNÇÕES DA IMAGEM LIGHTBOX =======
-function abrirLightbox(src) {
+  // Função para enviar o pedido para o WhatsApp
+function finalizarPedido() {
+  // Verifica se o carrinho está vazio
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio! Adicione algum lanche antes de finalizar.");
+    return;
+  }
+
+  // Monta a mensagem do pedido
+  let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
+
+  carrinho.forEach((item, index) => {
+    mensagem += `*${item.quantidade || 1}x ${item.nome}*`;
+    if (item.tamanho) {
+      mensagem += ` (Tamanho: ${item.tamanho})`;
+    }
+    mensagem += ` - R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}\n`;
+    
+    // Adiciona as observações, se houver
+    if (item.observacao) {
+      mensagem += `   *Obs:* ${item.observacao}\n`;
+    }
+  });
+
+  // Adiciona o valor total no final da mensagem
+  mensagem += `\n*Total do Pedido: R$ ${parseFloat(total).toFixed(2).replace('.', ',')}*`;
+
+  // O número que você me passou (só os números, com o código do país 55)
+  const numeroWhatsApp = "5533991123332"; 
+
+  // Cria o link do WhatsApp com a mensagem formatada
+  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+  // Abre o WhatsApp em uma nova aba
+  window.open(url, '_blank');
+}
+
+// Opcional: Se você quiser garantir que a função fique disponível no HTML (caso use módulos)
+window.finalizarPedido = finalizarPedido;
   const modal = document.getElementById('modal-lightbox');
   const img = document.getElementById('img-ampliada');
   img.src = src;

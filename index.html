@@ -1114,13 +1114,12 @@ h2 {
     </div>
 
     <button type="button" id="btn-finalizar" class="btn-finalizar" onclick="finalizarPedido()">
-      Finalizar Pedido
+      Finalizar Pedido (WhatsApp)
     </button>
 
     <div id="pedido-sucesso" class="pedido-sucesso">
-      <strong>✅ Pedido enviado com sucesso!</strong><br>
-      Seu pedido já foi recebido pelo Bolinha Lanches.<br>
-      Aguarde a confirmação do atendente.
+      <strong>✅ Pedido gerado com sucesso!</strong><br>
+      Você será redirecionado para o WhatsApp.<br>
     </div>
   </section>
 
@@ -1195,45 +1194,10 @@ h2 {
 
 <div id="toast">Item adicionado com sucesso! ✅</div>
 <script>
-  // Função para enviar o pedido para o WhatsApp
-function finalizarPedido() {
-  // Verifica se o carrinho está vazio
-  if (carrinho.length === 0) {
-    alert("Seu carrinho está vazio! Adicione algum lanche antes de finalizar.");
-    return;
-  }
-
-  // Monta a mensagem do pedido
-  let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
-
-  carrinho.forEach((item, index) => {
-    mensagem += `*${item.quantidade || 1}x ${item.nome}*`;
-    if (item.tamanho) {
-      mensagem += ` (Tamanho: ${item.tamanho})`;
-    }
-    mensagem += ` - R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')}\n`;
-    
-    // Adiciona as observações, se houver
-    if (item.observacao) {
-      mensagem += `   *Obs:* ${item.observacao}\n`;
-    }
-  });
-
-  // Adiciona o valor total no final da mensagem
-  mensagem += `\n*Total do Pedido: R$ ${parseFloat(total).toFixed(2).replace('.', ',')}*`;
-
-  // O número que você me passou (só os números, com o código do país 55)
-  const numeroWhatsApp = "5533991123332"; 
-
-  // Cria o link do WhatsApp com a mensagem formatada
-  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-
-  // Abre o WhatsApp em uma nova aba
-  window.open(url, '_blank');
-}
-
-// Opcional: Se você quiser garantir que a função fique disponível no HTML (caso use módulos)
-window.finalizarPedido = finalizarPedido;
+// ===========================================
+// FUNÇÕES DE LIGHTBOX (Fotos dos Lanches)
+// ===========================================
+function abrirLightbox(src) {
   const modal = document.getElementById('modal-lightbox');
   const img = document.getElementById('img-ampliada');
   img.src = src;
@@ -1659,12 +1623,15 @@ function atualizarCarrinho() {
   btnLimpar.disabled = false;
 }
 
-async function finalizarPedido() {
-  if (enviandoPedido) return;
+// ==============================================================
+// FUNÇÃO DE ENVIO PELO WHATSAPP (Substituindo o Firebase)
+// ==============================================================
+function finalizarPedido() {
   if (carrinho.length === 0) {
-    alert('Seu carrinho está vazio! Adicione itens antes de finalizar.');
+    alert("Seu carrinho está vazio! Adicione itens antes de finalizar.");
     return;
   }
+
   if (!validarTroco()) return;
 
   const nome = document.getElementById('cliente-nome').value.trim();
@@ -1672,7 +1639,10 @@ async function finalizarPedido() {
   const retirada = tipoPedido === 'Buscar na Loja (Retirada)';
   const endereco = document.getElementById('cliente-endereco').value.trim();
   const bairro = document.getElementById('cliente-bairro').value.trim();
+  const formaPagamento = document.getElementById('forma-pagamento').value;
+  const troco = document.getElementById('cliente-troco').value.trim();
 
+  // Validações
   if (!nome) {
     alert('Por favor, informe seu nome completo.');
     document.getElementById('cliente-nome').focus();
@@ -1684,71 +1654,57 @@ async function finalizarPedido() {
     return;
   }
 
-  const formaPagamento = document.getElementById('forma-pagamento').value;
-  const troco = document.getElementById('cliente-troco').value.trim();
+  // Montando a mensagem para o WhatsApp
+  let mensagem = `*NOVO PEDIDO - BOLINHA LANCHES* 🍔🍕\n\n`;
+  mensagem += `👤 *Cliente:* ${nome}\n`;
+  mensagem += `📦 *Tipo:* ${tipoPedido}\n`;
 
-  if (!window.db || !window.push || !window.ref) {
-    alert('Não foi possível conectar ao sistema de pedidos. Tente novamente em alguns instantes.');
-    return;
+  if (!retirada) {
+    mensagem += `📍 *Endereço:* ${endereco} - ${bairro}\n`;
   }
 
-  enviandoPedido = true;
-  const btnFinalizar = document.getElementById('btn-finalizar');
-  btnFinalizar.disabled = true;
-  btnFinalizar.classList.add('enviando');
-  btnFinalizar.innerText = 'Enviando pedido...';
+  mensagem += `\n🛒 *ITENS DO PEDIDO:*\n`;
+  carrinho.forEach((item) => {
+    mensagem += `🔸 *${item.quantidade}x ${item.nome}*\n`;
+    mensagem += `   R$ ${formatarMoeda(item.preco * item.quantidade)}\n`;
+    if (item.obs) {
+      mensagem += `   📝 *Obs:* ${item.obs}\n`;
+    }
+  });
 
-  const enderecoFinal = retirada ? 'Retirada no Balcão' : `${endereco} - ${bairro}`;
-  const itensTexto = carrinho.map(item => `${item.quantidade}x ${item.nome}` + (item.obs ? ` (${item.obs})` : '')).join(', ');
-  const itemPrincipal = carrinho.map(item => `${item.quantidade}x ${item.nome}`).join(', ');
-  const observacoes = carrinho.filter(item => item.obs).map(item => `${item.nome}: ${item.obs}`).join(' | ');
-
-  const novoPedidoObj = {
-    cliente: nome,
-    endereco: enderecoFinal,
-    tipo: tipoPedido,
-    formaPagamento: formaPagamento,
-    troco: troco || 'Não necessário',
-    item: itemPrincipal,
-    itens: itensTexto,
-    obs: observacoes,
-    valor: Number(calcularTotal().toFixed(2)),
-    data: new Date().toISOString(),
-    status: 'Pendente'
-  };
-
-  try {
-    await window.push(window.ref(window.db, 'pedidos'), novoPedidoObj);
-
-    carrinho = [];
-    total = 0;
-    salvarCarrinho();
-    atualizarCarrinho();
-
-    document.getElementById('cliente-nome').value = '';
-    document.getElementById('cliente-endereco').value = '';
-    document.getElementById('cliente-bairro').value = '';
-    document.getElementById('cliente-troco').value = '';
-    document.getElementById('forma-pagamento').value = 'Pix';
-    verificarPagamento();
-    document.getElementById('tipo-pedido').value = 'Receber em Casa (Entrega)';
-    atualizarTipoPedido();
-
-    const sucesso = document.getElementById('pedido-sucesso');
-    sucesso.classList.add('visivel');
-    sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    mostrarToast('Pedido enviado com sucesso! ✅');
-    setTimeout(() => { sucesso.classList.remove('visivel'); }, 8000);
-
-  } catch (erro) {
-    console.error('Erro ao enviar pedido:', erro);
-    alert('Não foi possível enviar seu pedido. Verifique sua conexão e tente novamente.');
-  } finally {
-    enviandoPedido = false;
-    btnFinalizar.classList.remove('enviando');
-    btnFinalizar.innerText = 'Finalizar Pedido';
-    checarHorarioFuncionamento();
+  mensagem += `\n💰 *Forma de Pagamento:* ${formaPagamento}\n`;
+  if (formaPagamento === 'Dinheiro' && troco) {
+    mensagem += `💵 *Troco para:* R$ ${troco}\n`;
   }
+
+  mensagem += `\n🧾 *TOTAL DO PEDIDO: R$ ${formatarMoeda(calcularTotal())}*`;
+
+  // Número e Link
+  const numeroWhatsApp = "5533991123332"; 
+  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+  // Abrir o WhatsApp
+  window.open(url, '_blank');
+
+  // Limpar os campos do formulário para o próximo pedido
+  carrinho = [];
+  total = 0;
+  salvarCarrinho();
+  atualizarCarrinho();
+
+  document.getElementById('cliente-nome').value = '';
+  document.getElementById('cliente-endereco').value = '';
+  document.getElementById('cliente-bairro').value = '';
+  document.getElementById('cliente-troco').value = '';
+  document.getElementById('forma-pagamento').value = 'Pix';
+  verificarPagamento();
+  document.getElementById('tipo-pedido').value = 'Receber em Casa (Entrega)';
+  atualizarTipoPedido();
+
+  // Mostrar mensagem de sucesso na tela
+  const sucesso = document.getElementById('pedido-sucesso');
+  sucesso.classList.add('visivel');
+  setTimeout(() => { sucesso.classList.remove('visivel'); }, 8000);
 }
 
 function initModalEvents() {
